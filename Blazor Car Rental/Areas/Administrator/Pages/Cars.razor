@@ -1,0 +1,76 @@
+﻿@page "/Cars"
+
+@using Blazor_Car_Rental.Data.Models
+@using Blazor_Car_Rental.Areas.Administrator.Services
+@inject AdmCarServices CarService
+@inject NavigationManager nav;
+
+<h1>Cars</h1>
+<input class="btn btn-success mb-3" type="button" @onclick="@AddNewCar" value="Add New Car" />
+@if (cars == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped table-dark cars-table">
+        <thead>
+            <tr>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Year</th>
+                <th class="secondary-data">Doors</th>
+                <th class="secondary-data">Luggages</th>
+                <th class="secondary-data">Power</th>
+                <th class="secondary-data">Transmission</th>
+                <th class="secondary-data">Fuel</th>
+                <th class="secondary-data">Engine</th>
+                <th>Price</th>
+                <th>Rented</th>
+                <th>Image</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var car in cars)
+            {
+            <tr>
+                <td>@car.Make</td>
+                <td>@car.Model</td>
+                <td>@car.Year</td>
+                <td class="secondary-data">@car.Doors</td>
+                <td class="secondary-data">@car.Luggages</td>
+                <td class="secondary-data">@car.Power</td>
+                <td class="secondary-data">@car.Transmission</td>
+                <td class="secondary-data">@car.Fuel</td>
+                <td class="secondary-data">@car.EngineDisplacement</td>
+                <td>@car.Price</td>
+                <td>@car.Rented</td>
+                <td><img src="../CarImages/@car.ImageName" class="img-fluid table-image" /></td>
+                <td>
+                    <div style="display:flex; flex-direction:row; justify-content:center; align-items:center;">
+                        <input type="button" class="btn btn-info" value="Edit" />
+                        <input type="button" class="btn btn-light" value="Details" />
+                        <input type="button" class="btn btn-danger" value="Delete" />
+                    </div>
+
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code{
+    private List<Car> cars;
+
+    protected override async Task OnInitializedAsync()
+    {
+        cars = CarService.GetCars();
+    }
+
+    void AddNewCar()
+    {
+        nav.NavigateTo("/CreateCar");
+    }
+}

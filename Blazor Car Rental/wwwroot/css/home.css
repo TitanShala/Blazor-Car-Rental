@@ -1,0 +1,29 @@
+﻿*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+.home{
+    background-image: url('../Images/Home.jpg');
+    background-repeat: repeat-x;
+    background-size: cover;
+    background-position:center;
+    min-height: 95vh;
+    min-width:100%;
+    margin:0 ;
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+}
+.home-text{
+    font-size:3rem;
+}
+.top-cars-section {
+    width: 100%;
+    background-color: black;
+    color: white;
+}
+.top-cars {
+
+}

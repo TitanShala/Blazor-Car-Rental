@@ -1,5 +1,6 @@
 using Blazor_Car_Rental.Areas.Identity;
 using Blazor_Car_Rental.Data;
+using Blazor_Car_Rental.Areas.Administrator.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -15,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Blazor_Car_Rental.Data.Services;
 
 namespace Blazor_Car_Rental
 {
@@ -40,6 +42,8 @@ namespace Blazor_Car_Rental
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddSingleton<WeatherForecastService>();
+            services.AddScoped<AdmCarServices>();
+            services.AddScoped<IFileUpload, FileUpload>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,0 +1,15 @@
+﻿.table-image{
+    max-width:250px;
+    height:auto;
+}
+.cars-table{
+    overflow:scroll;
+}
+.secondary-data {
+    display: none;
+}
+@media (max-width:772px){
+    .secondary-data {
+        display: none;
+    }
+}

@@ -1,0 +1,98 @@
+﻿@page "/CreateCar"
+@using Blazor_Car_Rental.Data.Models
+@using Blazor_Car_Rental.Areas.Administrator.Services
+@using Blazor_Car_Rental.Data.Services
+@inject AdmCarServices CarService
+@inject NavigationManager nav;
+@inject IFileUpload fileUpload;  
+
+
+    <h2>Add New Car</h2>
+
+    <form>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label for="Make" class="control-label">Make</label>
+                    <input form="Make" class="form-control" @bind="newCar.Make" />
+                </div>
+                <div class="form-group">
+                    <label for="Model" class="control-label">Model</label>
+                    <input form="Model" class="form-control" @bind="newCar.Model" />
+                </div>
+                <div class="form-group">
+                    <label for="Year" class="control-label">Year</label>
+                    <input form="Year" class="form-control" @bind="newCar.Year" />
+                </div>
+                <div class="form-group">
+                    <label for="Doors" class="control-label">Doors</label>
+                    <input form="Doors" class="form-control" @bind="newCar.Doors" />
+                </div>
+                <div class="form-group">
+                    <label for="Luggages" class="control-label">Luggages</label>
+                    <input form="Luggages" class="form-control" @bind="newCar.Luggages" />
+                </div>
+                <div class="form-group">
+                    <label for="Power" class="control-label">Power</label>
+                    <input form="Power" class="form-control" @bind="newCar.Power" />
+                </div>
+                <div class="form-group">
+                    <label for="Transmission" class="control-label">Transmission</label>
+                    <input form="Transmission" class="form-control" @bind="newCar.Transmission" />
+                </div>
+                <div class="form-group">
+                    <label for="Fuel" class="control-label">Fuel</label>
+                    <input form="Fuel" class="form-control" @bind="newCar.Fuel" />
+                </div>
+                <div class="form-group">
+                    <label for="EngineDisplacement" class="control-label">EngineDisplacement</label>
+                    <input form="EngineDisplacement" class="form-control" @bind="newCar.EngineDisplacement" />
+                </div>
+                <div class="form-group">
+                    <label for="Price" class="control-label">Price</label>
+                    <input form="Price" class="form-control" @bind="newCar.Price" />
+                </div>
+                <div class="form-group">
+                    <label for="ImageFile" class="control-label">Image</label>
+                    <InputFile OnChange="@HandleFileSelected"></InputFile>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <input type="button" class="btn btn-primary" @onclick="@CreateNewCar" value="Save" />
+                    <input type="button" class="btn btn-danger" @onclick="@Cancel" value="Cancel" />
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+    @code {
+        Car newCar = new Car();
+
+        IFileListEntry file;
+
+        async Task HandleFileSelected(IFileListEntry[] files)
+        {
+            file = files.FirstOrDefault();
+
+        }
+
+        protected async void CreateNewCar()
+        {
+            if (file != null)
+            {
+                string fileName = Path.GetFileNameWithoutExtension(file.Name) + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(file.Name); ;
+                newCar.ImageName = fileName;
+                await CarService.CreateCarAsync(newCar);
+                await fileUpload.Upload(file, fileName);
+            }
+
+
+            nav.NavigateTo("/");
+        }
+        protected void Cancel()
+        {
+            nav.NavigateTo("/Cars");
+        }
+    }

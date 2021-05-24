@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BlazorInputFile;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,6 +11,7 @@ namespace Blazor_Car_Rental.Data.Models
 {
     public class Car
     {
+
         [Key]
         public int Id { get; set; }
 
@@ -63,11 +65,12 @@ namespace Blazor_Car_Rental.Data.Models
 
         [NotMapped]
         [Display(Name = "Upload Image")]
-        public IFormFile ImageFile { get; set; }
+        public IFileListEntry ImageFile { get; set; }
 
         [Required]
         public bool Rented { get; set; }
 
         public ICollection<Rental> Rentals { get; set; }
+
     }
 }
