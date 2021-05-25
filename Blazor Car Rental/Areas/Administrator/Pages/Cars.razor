@@ -5,8 +5,8 @@
 @inject AdmCarServices CarService
 @inject NavigationManager nav;
 @inject IFileUpload fileUpload;
-<h1>Cars</h1>
-<input class="btn btn-success mb-3" type="button" @onclick="@AddNewCar" value="Add New Car" />
+<h1 class="text-center text-white bg-dark">Cars List</h1>
+
 @if (cars == null)
 {
     <p><em>Loading...</em></p>
@@ -28,7 +28,7 @@ else
                 <th>Price</th>
                 <th>Rented</th>
                 <th>Image</th>
-                <th></th>
+                <th><input class="btn btn-success mb-3" type="button" @onclick="@AddNewCar" value="Add New Car" /></th>
             </tr>
         </thead>
         <tbody>
