@@ -41,7 +41,6 @@ namespace Blazor_Car_Rental
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-            services.AddSingleton<WeatherForecastService>();
             services.AddScoped<AdmCarServices>();
             services.AddScoped<IFileUpload, FileUpload>();
         }

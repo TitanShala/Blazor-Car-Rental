@@ -1,0 +1,107 @@
+﻿@page "/EditCar/{Id}"
+@using Blazor_Car_Rental.Data.Models
+@using Blazor_Car_Rental.Areas.Administrator.Services
+@using Blazor_Car_Rental.Data.Services
+@inject AdmCarServices CarService
+@inject NavigationManager nav;
+@inject IFileUpload fileUpload;
+
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="Make" class="control-label">Make</label>
+                <input form="Make" class="form-control" @bind="car.Make" />
+            </div>
+            <div class="form-group">
+                <label for="Model" class="control-label">Model</label>
+                <input form="Model" class="form-control" @bind="car.Model" />
+            </div>
+            <div class="form-group">
+                <label for="Year" class="control-label">Year</label>
+                <input form="Year" class="form-control" @bind="car.Year" />
+            </div>
+            <div class="form-group">
+                <label for="Doors" class="control-label">Doors</label>
+                <input form="Doors" class="form-control" @bind="car.Doors" />
+            </div>
+            <div class="form-group">
+                <label for="Luggages" class="control-label">Luggages</label>
+                <input form="Luggages" class="form-control" @bind="car.Luggages" />
+            </div>
+            <div class="form-group">
+                <label for="Power" class="control-label">Power</label>
+                <input form="Power" class="form-control" @bind="car.Power" />
+            </div>
+            <div class="form-group">
+                <label for="Transmission" class="control-label">Transmission</label>
+                <input form="Transmission" class="form-control" @bind="car.Transmission" />
+            </div>
+            <div class="form-group">
+                <label for="Fuel" class="control-label">Fuel</label>
+                <input form="Fuel" class="form-control" @bind="car.Fuel" />
+            </div>
+            <div class="form-group">
+                <label for="EngineDisplacement" class="control-label">EngineDisplacement</label>
+                <input form="EngineDisplacement" class="form-control" @bind="car.EngineDisplacement" />
+            </div>
+            <div class="form-group">
+                <label for="Price" class="control-label">Price</label>
+                <input form="Price" class="form-control" @bind="car.Price" />
+            </div>
+            <div class="form-group">
+                <label for="ImageFile" class="control-label">Image</label>
+                <InputFile OnChange="@HandleFileSelected"></InputFile>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="Update" value="Update" />
+                <input type="button" class="btn btn-danger" @onclick="Cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    Car car = new Car();
+    IFileListEntry file;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        car = CarService.GetCar(Convert.ToInt32(Id));
+    }
+
+    async Task HandleFileSelected(IFileListEntry[] files)
+    {
+        file = files.FirstOrDefault();
+    }
+
+    protected async void Update()
+    {
+
+        if (file != null)
+        {
+            await fileUpload.DeleteOldImage(car.ImageName);
+            string fileName = Path.GetFileNameWithoutExtension(file.Name) + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(file.Name); ;
+            car.ImageName = fileName;
+
+            await fileUpload.Upload(file, fileName);
+        }
+        CarService.UpdateCar(car);
+
+        nav.NavigateTo("/Cars");
+    }
+    protected void Cancel()
+    {
+        nav.NavigateTo("/Cars");
+    }
+
+}
+

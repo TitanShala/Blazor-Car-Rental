@@ -28,5 +28,19 @@ namespace Blazor_Car_Rental.Data.Services
                 memoryStream.WriteTo(fileStream);
             }
         }
+
+        public async Task DeleteOldImage (string imageName)
+        {
+            var path = Path.Combine(_oWebHostEnvironment.WebRootPath, "CarImages", imageName);
+            if (System.IO.File.Exists(path))
+            {
+                FileInfo fi = new FileInfo(path);
+                if (fi != null)
+                {
+                    System.IO.File.Delete(path);
+                    fi.Delete();
+                }
+            }
+        }
     }
 }

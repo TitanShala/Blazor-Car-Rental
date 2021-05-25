@@ -9,5 +9,6 @@ namespace Blazor_Car_Rental.Data.Services
     public interface IFileUpload
     {
         Task Upload(IFileListEntry file, string filename);
+        Task DeleteOldImage(string imageName);
     }
 }

@@ -1,10 +1,10 @@
 ﻿@page "/Cars"
-
 @using Blazor_Car_Rental.Data.Models
 @using Blazor_Car_Rental.Areas.Administrator.Services
+@using Blazor_Car_Rental.Data.Services
 @inject AdmCarServices CarService
 @inject NavigationManager nav;
-
+@inject IFileUpload fileUpload;
 <h1>Cars</h1>
 <input class="btn btn-success mb-3" type="button" @onclick="@AddNewCar" value="Add New Car" />
 @if (cars == null)
@@ -34,28 +34,28 @@ else
         <tbody>
             @foreach (var car in cars)
             {
-            <tr>
-                <td>@car.Make</td>
-                <td>@car.Model</td>
-                <td>@car.Year</td>
-                <td class="secondary-data">@car.Doors</td>
-                <td class="secondary-data">@car.Luggages</td>
-                <td class="secondary-data">@car.Power</td>
-                <td class="secondary-data">@car.Transmission</td>
-                <td class="secondary-data">@car.Fuel</td>
-                <td class="secondary-data">@car.EngineDisplacement</td>
-                <td>@car.Price</td>
-                <td>@car.Rented</td>
-                <td><img src="../CarImages/@car.ImageName" class="img-fluid table-image" /></td>
-                <td>
-                    <div style="display:flex; flex-direction:row; justify-content:center; align-items:center;">
-                        <input type="button" class="btn btn-info" value="Edit" />
-                        <input type="button" class="btn btn-light" value="Details" />
-                        <input type="button" class="btn btn-danger" value="Delete" />
-                    </div>
+                <tr>
+                    <td>@car.Make</td>
+                    <td>@car.Model</td>
+                    <td>@car.Year</td>
+                    <td class="secondary-data">@car.Doors</td>
+                    <td class="secondary-data">@car.Luggages</td>
+                    <td class="secondary-data">@car.Power</td>
+                    <td class="secondary-data">@car.Transmission</td>
+                    <td class="secondary-data">@car.Fuel</td>
+                    <td class="secondary-data">@car.EngineDisplacement</td>
+                    <td>@car.Price</td>
+                    <td>@car.Rented</td>
+                    <td><img src="../CarImages/@car.ImageName" class="img-fluid table-image" /></td>
+                    <td>
+                        <div style="display:flex; flex-direction:row; justify-content:center; align-items:center;">
+                            <input type="button" class="btn btn-info" value="Edit" @onclick="() => EditCar(car.Id)" />
+                            <input type="button" class="btn btn-light" value="Details" @onclick="() => CarDetails(car.Id)" />
+                            <input type="button" class="btn btn-danger" value="Delete" @onclick="() => DeleteCar(car.Id,car.ImageName)" />
+                        </div>
 
-                </td>
-            </tr>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
@@ -66,11 +66,28 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        cars = CarService.GetCars();
+        cars = await CarService.GetCars();
     }
 
     void AddNewCar()
     {
         nav.NavigateTo("/CreateCar");
+    }
+
+    async Task EditCar(int id)
+    {
+        nav.NavigateTo("/EditCar/" + id);
+    }
+
+    async Task CarDetails(int id)
+    {
+        nav.NavigateTo("/CarDetails/" + id);
+    }
+
+    async Task DeleteCar(int id, string imageName)
+    {
+        await fileUpload.DeleteOldImage(imageName);
+        CarService.DeleteCar(id);
+        cars = await CarService.GetCars();
     }
 }

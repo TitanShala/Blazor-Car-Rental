@@ -1,0 +1,24 @@
+﻿@page "/CarDetails/{Id}"
+
+
+@using Blazor_Car_Rental.Data.Models
+@using Blazor_Car_Rental.Areas.Administrator.Services
+@using Blazor_Car_Rental.Data.Services
+@inject AdmCarServices CarService
+@inject NavigationManager nav;
+@inject IFileUpload fileUpload;
+
+@car.Make
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    Car car = new Car();
+
+    protected override async Task OnInitializedAsync()
+    {
+        car = CarService.GetCar(Convert.ToInt32(Id));
+    }
+
+}

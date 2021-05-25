@@ -30,9 +30,9 @@ namespace Blazor_Car_Rental.Areas.Administrator.Services
             _context.SaveChanges();
             return "Car Created Succesfully";
         } 
-        public List<Car> GetCars()
+        public async Task<List<Car>> GetCars()
         {
-            List<Car> Cars = _context.Cars.ToList();
+            List<Car> Cars =  _context.Cars.ToList();
             return Cars;
         }
 
@@ -49,8 +49,9 @@ namespace Blazor_Car_Rental.Areas.Administrator.Services
             return "Update Succesfully";
         }
 
-        public string DeleteCar(Car car)
+        public string DeleteCar(int id)
         {
+            Car car = _context.Cars.Where(c => c.Id == id).FirstOrDefault();
             _context.Cars.Remove(car);
             _context.SaveChanges();
             return "Car Deleted Succesfully";
