@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Blazor_Car_Rental.Data.Services;
+using Blazor_Car_Rental.Areas.Identity.Models;
 
 namespace Blazor_Car_Rental
 {
@@ -36,7 +37,7 @@ namespace Blazor_Car_Rental
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("ApplicationDbContextConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
             services.AddServerSideBlazor();
@@ -47,7 +48,7 @@ namespace Blazor_Car_Rental
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -75,6 +76,48 @@ namespace Blazor_Car_Rental
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+            CreateRoles(serviceProvider);
+        }
+
+        private void CreateRoles(IServiceProvider serviceProvider)
+        {
+
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+            Task<IdentityResult> roleResult;
+            string email = "default@gmail.com";
+
+
+            //Check that there is an Administrator role and create if not
+            Task<bool> hasAdminRole = roleManager.RoleExistsAsync("Admin");
+            hasAdminRole.Wait();
+
+            if (!hasAdminRole.Result)
+            {
+                roleResult = roleManager.CreateAsync(new IdentityRole("Admin"));
+                roleResult.Wait();
+
+                roleResult = roleManager.CreateAsync(new IdentityRole("User"));
+                roleResult.Wait();
+
+
+                //Check if the admin user exists and create it if not
+                //Add to the Administrator role
+
+                IdentityUser administrator = new IdentityUser();
+                administrator.UserName = "default@gmail.com";
+                administrator.Email = email;
+                administrator.EmailConfirmed = true;
+
+                roleResult = userManager.CreateAsync(administrator, "Password.123");
+                roleResult.Wait();
+
+                roleResult = userManager.AddToRoleAsync(administrator, "Admin");
+                roleResult.Wait();
+
+            }
+
         }
     }
 }

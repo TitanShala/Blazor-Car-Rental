@@ -8,10 +8,9 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject RentalServices RentalService
-@inject AdmCarServices CarServices 
+@inject AdmCarServices CarServices
 @inject NavigationManager nav
-
-
+@attribute [Authorize]
 
 <h3>RentalCreate, Username= @username</h3>
 <form>
@@ -39,7 +38,7 @@
     [Parameter]
     public string Id { get; set; }
 
-    public int CarId ;
+    public int CarId;
     Rental rental = new Rental();
     User user = new User();
     string username = "";
@@ -47,6 +46,10 @@
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (!authState.User.Identity.IsAuthenticated)
+        {
+            
+        }
         CarId = (Convert.ToInt32(Id));
 
         username = authState.User.Identity.Name;
