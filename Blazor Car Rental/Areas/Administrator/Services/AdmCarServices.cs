@@ -30,10 +30,33 @@ namespace Blazor_Car_Rental.Areas.Administrator.Services
             _context.SaveChanges();
             return "Car Created Succesfully";
         } 
+
         public async Task<List<Car>> GetCars()
         {
-            List<Car> Cars =  _context.Cars.ToList();
+            List<Car> Cars = _context.Cars.ToList();
             return Cars;
+        }
+
+        public async Task<List<Car>> GetTopCars()
+        {
+            List<Car> Cars = _context.Cars.OrderByDescending(c=> c.Year).ToList();
+            //List<Car> Cars = _context.Cars.ToList();
+            List<Car> TopCars = new List<Car>();
+            if(Cars.Count > 2)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    TopCars.Add(Cars[i]);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < Cars.Count; i++)
+                {
+                    TopCars.Add(Cars[i]);
+                }
+            }
+            return TopCars;
         }
 
         public Car GetCar(int id)

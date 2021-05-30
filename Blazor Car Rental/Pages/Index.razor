@@ -1,26 +1,36 @@
 ﻿@page "/"
-
+@using Blazor_Car_Rental.Data.Models
+@using Blazor_Car_Rental.Areas.Administrator.Services
+@inject AdmCarServices CarServices
+@inject NavigationManager nav;
 <div class="container home text-center">
     <h1 class="text-white home-text">Do you want to drive the car of your DREAMS?<br />You just came to the right place!</h1>
 </div>
 <section class="top-cars-section pt-5 text-center">
     <div class="container top-cars">
         <div class="row">
-            <div class="col-md-4">
-                <img src="../CarImages/mercedes-benz-e-class 20213248573.jpeg" class="img-fluid" />
-                <h3>Mercedes</h3>
-                <p>E350</p>
-            </div>
-            <div class="col-md-4">
-                <img src="../CarImages/mercedes-benz-e-class 20213248573.jpeg" class="img-fluid" />
-                <h3>Mercedes</h3>
-                <p>E350</p>
-            </div>
-            <div class="col-md-4">
-                <img src="../CarImages/mercedes-benz-e-class 20213248573.jpeg" class="img-fluid" />
-                <h3>Mercedes</h3>
-                <p>E350</p>
-            </div>
+            @foreach (var car in TopCars)
+            {
+                <div class="col-md-4">
+                    <img src="../CarImages/@car.ImageName" class="img-fluid" />
+                    <h3>@car.Make</h3>
+                    <p>@car.Model</p>
+                    <input type="button" class="btn btn-success" value="Rent" @onclick="() => RentCar(car.Id)" />
+                </div>
+            }
         </div>
     </div>
 </section>
+
+@code{
+    List<Car> TopCars;
+
+    protected override async Task OnInitializedAsync()
+    {
+        TopCars = await CarServices.GetTopCars();
+    }
+    async Task RentCar(int id)
+    {
+        nav.NavigateTo("/RentalCreate/" + id);
+    }
+}

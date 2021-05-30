@@ -42,6 +42,7 @@ namespace Blazor_Car_Rental
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddScoped<AdmCarServices>();
+            services.AddScoped<RentalServices>();
             services.AddScoped<IFileUpload, FileUpload>();
         }
 
