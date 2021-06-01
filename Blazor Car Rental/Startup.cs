@@ -45,6 +45,7 @@ namespace Blazor_Car_Rental
             services.AddScoped<AdmCarServices>();
             services.AddScoped<RentalServices>();
             services.AddScoped<IFileUpload, FileUpload>();
+            services.AddScoped<MessageService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

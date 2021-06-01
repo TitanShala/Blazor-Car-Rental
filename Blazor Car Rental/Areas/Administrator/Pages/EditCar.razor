@@ -2,9 +2,13 @@
 @using Blazor_Car_Rental.Data.Models
 @using Blazor_Car_Rental.Areas.Administrator.Services
 @using Blazor_Car_Rental.Data.Services
-@inject AdmCarServices CarService
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject AdmCarServices CarService;
 @inject NavigationManager nav;
 @inject IFileUpload fileUpload;
+
 
 <form>
     <div class="row">
@@ -75,10 +79,18 @@
 
     protected override async Task OnInitializedAsync()
     {
-        car = CarService.GetCar(Convert.ToInt32(Id));
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (!authState.User.Identity.IsAuthenticated)
+        {
+            nav.NavigateTo("Identity/Account/Login");
+        }
+        else if (!authState.User.IsInRole("Admin"))
+        {
+            nav.NavigateTo("/");
+        }
     }
 
-    async Task HandleFileSelected(IFileListEntry[] files)
+    void HandleFileSelected(IFileListEntry[] files)
     {
         file = files.FirstOrDefault();
     }

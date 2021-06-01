@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,8 +10,8 @@ namespace Blazor_Car_Rental.Data.Models
 {
     public class Message
     {
-        [Key]
-        public int Id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; } = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
 
         [Required]
         [StringLength(60, MinimumLength = 5, ErrorMessage = "Make length should between 5 and 60")]

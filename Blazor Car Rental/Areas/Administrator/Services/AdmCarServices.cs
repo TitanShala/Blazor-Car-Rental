@@ -7,7 +7,7 @@ using Blazor_Car_Rental.Data;
 using Blazor_Car_Rental.Data.Models;
 using Microsoft.AspNetCore.Hosting;
 using Blazor_Car_Rental.Data.Services;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace Blazor_Car_Rental.Areas.Administrator.Services
 {
@@ -26,21 +26,20 @@ namespace Blazor_Car_Rental.Areas.Administrator.Services
         public async Task<string> CreateCarAsync(Car car)
         {       
             car.Rented = false;
-            _context.Cars.Add(car);
+            await _context.Cars.AddAsync(car);
             _context.SaveChanges();
             return "Car Created Succesfully";
         } 
 
         public async Task<List<Car>> GetCars()
         {
-            List<Car> Cars = _context.Cars.ToList();
+            List<Car> Cars = await _context.Cars.ToListAsync();
             return Cars;
         }
 
         public async Task<List<Car>> GetTopCars()
         {
-            List<Car> Cars = _context.Cars.OrderByDescending(c=> c.Year).ToList();
-            //List<Car> Cars = _context.Cars.ToList();
+            List<Car> Cars = _context.Cars.OrderByDescending(c=> c.rentalcount).ToList();
             List<Car> TopCars = new List<Car>();
             if(Cars.Count > 2)
             {
@@ -59,9 +58,9 @@ namespace Blazor_Car_Rental.Areas.Administrator.Services
             return TopCars;
         }
 
-        public Car GetCar(int id)
+        public async Task<Car> GetCar(int id)
         {
-            Car car = _context.Cars.FirstOrDefault(c => c.Id == id);
+            Car car = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id);
             return car;
         }
 

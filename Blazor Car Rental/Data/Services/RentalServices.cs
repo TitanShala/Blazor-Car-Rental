@@ -4,6 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Blazor_Car_Rental.Areas.Identity.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blazor_Car_Rental.Data.Services
 {
@@ -20,17 +23,20 @@ namespace Blazor_Car_Rental.Data.Services
 
         public async Task<string> CreateCarAsync(Rental rental, int carId, string userName)
         {
-            var user = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
+            var user = await _context.Users.Where(u => u.UserName == userName).FirstOrDefaultAsync();
             string userId = user.Id;
             rental.UserId = userId;
             rental.CarId = carId;
+            Car car = _context.Cars.Where(c => c.Id == carId).FirstOrDefault();
+            car.rentalcount += 1;
+            _context.Cars.Update(car);
             _context.Rentals.Add(rental);
             _context.SaveChanges();
             return "Rental Created Succesfully";
         }
         public async Task<List<Rental>> GetRentals ()
         {
-            List<Rental> Rentals = _context.Rentals.ToList();
+            List<Rental> Rentals = await _context.Rentals.Include(r=> r.Car).ToListAsync();
             return Rentals;
         }
 
@@ -54,5 +60,17 @@ namespace Blazor_Car_Rental.Data.Services
             _context.SaveChanges();
             return "Rental Deleted Succesfully";
         }
+
+        public IdentityUser getRentalUser(string id)
+        {
+            IdentityUser user =  _context.Users.Where(u => u.Id.Equals(id)).FirstOrDefault();
+            return user;
+        }
+        public void SetToReturned(Rental rental)
+        {
+            rental.Returned = true;
+            _context.SaveChanges();
+        }
+
     }
 }

@@ -23,16 +23,27 @@
                     </NavLink>
                 </li>
                 <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="fetchdata">
+                    <NavLink class="nav-link" href="Contact">
                         <span class="oi oi-list-rich" aria-hidden="true"></span> Contact
                     </NavLink>
                 </li>
             
             <AuthorizeView Roles="Admin">
                 <Authorized>
+                    <li><h3 class="text-white">Admin Panel</h3></li>
                     <li class="nav-item px-3">
                         <NavLink class="nav-link" href="Cars">
                             <span class="oi oi-check" aria-hidden="true"></span> Cars
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="RentalsList">
+                            <span class="oi oi-check" aria-hidden="true"></span> Rentals
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="MessageList">
+                            <span class="oi oi-check" aria-hidden="true"></span> Messages
                         </NavLink>
                     </li>
                 </Authorized>

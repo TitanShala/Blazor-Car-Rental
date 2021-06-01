@@ -70,6 +70,8 @@ namespace Blazor_Car_Rental.Data.Models
         [Required]
         public bool Rented { get; set; }
 
+        [Required]
+        public int rentalcount { get; set; }
         public ICollection<Rental> Rentals { get; set; }
 
     }

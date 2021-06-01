@@ -24,6 +24,14 @@
     background-color: black;
     color: white;
 }
-.top-cars {
-
+.top-cars img{
+    max-height:150px;
+    margin-bottom: 25px;
+}
+.top-cars .trainer-item {
+    border-radius: 5%;
+    padding-top: 30px;
+    padding-bottom: 20px;
+    background-color: #57090e;
+    color:white;
 }

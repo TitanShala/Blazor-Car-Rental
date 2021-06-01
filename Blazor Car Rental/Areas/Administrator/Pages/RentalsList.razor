@@ -1,0 +1,99 @@
+﻿@page "/RentalsList"
+
+@using Microsoft.AspNetCore.Identity;
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@using Blazor_Car_Rental.Data.Models
+@using Blazor_Car_Rental.Data.Services
+@inject RentalServices RentalService
+@inject NavigationManager nav;
+@inject IFileUpload fileUpload;
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<h1 class="text-center text-white bg-dark">Rentals List</h1>
+
+
+@if (RentalList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped table-dark cars-table">
+        <thead>
+            <tr>
+                <th>Car</th>
+                <th>User</th>
+                <th>ReceiptDate</th>
+                <th>Return Date</th>
+                <th>Rented</th>
+                <th>Car Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rental in RentalList)
+            {
+                IdentityUser user = RentalService.getRentalUser(rental.UserId);
+                <tr>
+                    <td>@rental.Car.Make @rental.Car.Model</td>
+                    <td>@user.UserName</td>
+                    <td>@rental.ReceiptDate</td>
+                    <td>@rental.ReturnDate</td>
+                    <td>@rental.Returned</td>
+                    <td><img src="../CarImages/@rental.Car.ImageName" class="img-fluid table-image" /></td>
+                    <td>
+                        <div style="display:flex; flex-direction:row; justify-content:center; align-items:center;">
+                            <input type="button" class="btn btn-info" value="Finish" @onclick="() => SetToReturned(rental)" />
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code{
+    private List<Rental> RentalList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (!authState.User.Identity.IsAuthenticated)
+        {
+            nav.NavigateTo("Identity/Account/Login");
+        }
+        else if (!authState.User.IsInRole("Admin"))
+        {
+            nav.NavigateTo("/");
+        }
+        RentalList = await RentalService.GetRentals();
+    }
+
+    void SetToReturned(Rental rental)
+    {
+        RentalService.SetToReturned(rental);
+        nav.NavigateTo("/RentalsList");
+    }
+    /*
+    void AddNewCar()
+    {
+        nav.NavigateTo("/CreateCar");
+    }
+
+    async Task EditCar(int id)
+    {
+        nav.NavigateTo();
+    }
+
+    async Task CarDetails(int id)
+    {
+        nav.NavigateTo();
+    }
+
+    async Task DeleteCar()
+    {
+        await fileUpload.DeleteOldImage(imageName);
+        CarService.DeleteCar(id);
+        cars = await CarService.GetCars();
+    }*/
+}

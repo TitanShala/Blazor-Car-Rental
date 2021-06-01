@@ -10,9 +10,9 @@
 @inject RentalServices RentalService
 @inject AdmCarServices CarServices
 @inject NavigationManager nav
-@attribute [Authorize]
 
-<h3>RentalCreate, Username= @username</h3>
+
+<h3>RentalCreate</h3>
 <form>
     <div class="row">
         <div class="col-md-8">
@@ -48,7 +48,7 @@
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         if (!authState.User.Identity.IsAuthenticated)
         {
-            
+            nav.NavigateTo("Identity/Account/Login");
         }
         CarId = (Convert.ToInt32(Id));
 
@@ -59,12 +59,13 @@
 
     }
 
-    private async void CreateNewRental()
+    private async Task CreateNewRental()
     {
-        RentalService.CreateCarAsync(rental, CarId, username);
+        await RentalService.CreateCarAsync(rental, CarId, username);
+        nav.NavigateTo("/cars");
     }
-    private async void Cancel()
+    private void Cancel()
     {
-
+        nav.NavigateTo("/cars");
     }
 }
