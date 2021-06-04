@@ -29,5 +29,7 @@ namespace Blazor_Car_Rental.Data.Models
         public DateTime ReturnDate { get; set; }
 
         public bool Returned { get; set; }
+
+        public int? Rate { get; set; }
     }
 }

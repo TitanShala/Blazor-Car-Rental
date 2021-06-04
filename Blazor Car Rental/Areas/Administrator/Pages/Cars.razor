@@ -3,6 +3,7 @@
 @using Blazor_Car_Rental.Areas.Administrator.Services
 @using Blazor_Car_Rental.Data.Services
 @inject AdmCarServices CarService
+@inject RentalServices RentalService
 @inject NavigationManager nav;
 @inject IFileUpload fileUpload;
 <h1 class="text-center text-white bg-dark">Cars List</h1>
@@ -28,6 +29,7 @@ else
                 <th>Price</th>
                 <th>Rented</th>
                 <th>Image</th>
+                <th>Rate</th>
                 <th><input class="btn btn-success mb-3" type="button" @onclick="@AddNewCar" value="Add New Car" /></th>
             </tr>
         </thead>
@@ -47,6 +49,7 @@ else
                     <td>@car.Price</td>
                     <td>@car.Rented</td>
                     <td><img src="../CarImages/@car.ImageName" class="img-fluid table-image" /></td>
+                    <td>@getReview(car.Id)</td>
                     <td>
                         <div style="display:flex; flex-direction:row; justify-content:center; align-items:center;">
                             <input type="button" class="btn btn-info" value="Edit" @onclick="() => EditCar(car.Id)" />
@@ -72,6 +75,10 @@ else
     void AddNewCar()
     {
         nav.NavigateTo("/CreateCar");
+    }
+    double getReview(int carId)
+    {
+        return RentalService.getReview(carId);
     }
 
     async Task EditCar(int id)

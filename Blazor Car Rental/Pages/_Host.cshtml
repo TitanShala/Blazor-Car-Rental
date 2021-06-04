@@ -11,6 +11,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Blazor Car Rental</title>
+    <script src="https://js.stripe.com/v3/"></script>
     <script src="https://kit.fontawesome.com/5305d44d50.js" crossorigin="anonymous"></script>
     <base href="~/" />
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
@@ -20,6 +21,7 @@
 
 </head>
 <body>
+    <button id="checkout-button">Checkout</button>
     <app>
         <component type="typeof(App)" render-mode="ServerPrerendered" />
     </app>
@@ -37,5 +39,37 @@
 
     <script src="_framework/blazor.server.js"></script>
     <script src="_content/BlazorInputFile/inputfile.js"></script>
+    <script type="text/javascript">
+        console.log('12');
+        // Create an instance of the Stripe object with your publishable API key
+        var stripe = Stripe('pk_test_51Ixf90DWzkrn83GaQkUf4eBA6y4vhBbt7AloMy6GgTsGDlA2UWi9Z5HOhEZaXZOUMUliYp9BAVo6FXwd9ZQCHGDy009FnNvxnX');
+        var checkoutButton = document.getElementById('checkout-button');
+        
+        checkoutButton.addEventListener('click', 
+        function check() {
+            // Create a new Checkout Session using the server-side endpoint you
+            // created in step 3.
+            fetch('/create-checkout-session', {
+                method: 'POST',
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (session) {
+                    return stripe.redirectToCheckout({ sessionId: session.id });
+                })
+                .then(function (result) {
+                    // If `redirectToCheckout` fails due to a browser or network
+                    // error, you should display the localized error message to your
+                    // customer using `error.message`.
+                    if (result.error) {
+                        alert(result.error.message);
+                    }
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
 </body>
 </html>

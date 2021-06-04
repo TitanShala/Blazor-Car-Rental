@@ -10,9 +10,10 @@
 @inject RentalServices RentalService
 @inject AdmCarServices CarServices
 @inject NavigationManager nav
-
+@inject IJSRuntime JSRuntime
 
 <h3>RentalCreate</h3>
+
 <form>
     <div class="row">
         <div class="col-md-8">
@@ -27,12 +28,16 @@
         </div>
         <div class="col-md-4">
             <div class="form-group">
+
                 <input type="button" class="btn btn-primary" @onclick="@CreateNewRental" value="Save" />
                 <input type="button" class="btn btn-danger" @onclick="@Cancel" value="Cancel" />
+                <button id="checkout-button" @onclick="check">Checkout</button>
             </div>
         </div>
     </div>
 </form>
+
+
 @code {
 
     [Parameter]
@@ -67,5 +72,10 @@
     private void Cancel()
     {
         nav.NavigateTo("/cars");
+    }
+    
+    public async void check()
+    {
+        await JSRuntime.InvokeVoidAsync("check");
     }
 }

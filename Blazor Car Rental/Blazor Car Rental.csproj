@@ -21,6 +21,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.12" />
     <PackageReference Include="MongoDB.Driver" Version="2.12.3" />
+    <PackageReference Include="Stripe.net" Version="39.50.0" />
   </ItemGroup>
 
   <ItemGroup>

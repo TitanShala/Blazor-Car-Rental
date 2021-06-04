@@ -40,18 +40,25 @@ namespace Blazor_Car_Rental.Data.Services
             return Rentals;
         }
 
+        public async Task<List<Rental>> GetMyRentals(string userName)
+        {
+            var user = await _context.Users.Where(u => u.UserName == userName).FirstOrDefaultAsync();
+            List<Rental> Rentals = await _context.Rentals.Include(r => r.Car).Where(r=> r.UserId.Equals(user.Id)).ToListAsync();
+            return Rentals;
+        }
+
         /*public Car GetRental(int id)
         {
             Car car = _context.Cars.FirstOrDefault(c => c.Id == id);
             return car;
         }
-
-        public string UpdateCar(Car car)
+        */
+        public string Update(Rental rental)
         {
-            _context.Cars.Update(car);
+            _context.Rentals.Update(rental);
             _context.SaveChanges();
             return "Update Succesfully";
-        }*/
+        }
 
         public string DeleteRental(int id)
         {
@@ -71,6 +78,15 @@ namespace Blazor_Car_Rental.Data.Services
             rental.Returned = true;
             _context.SaveChanges();
         }
-
+        public double getReview(int carId)
+        {
+            List<Rental> rentals = _context.Rentals.Where(r => r.CarId == carId && (r.Rate != 0 && r.Rate != null) ).ToList();
+            double a = 0;
+            foreach(var rent in rentals)
+            {
+                a += (double)rent.Rate;
+            }
+            return a/rentals.Count;
+        }
     }
 }
