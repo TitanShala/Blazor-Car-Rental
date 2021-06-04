@@ -1,8 +1,10 @@
 ﻿@page "/"
 @using Blazor_Car_Rental.Data.Models
 @using Blazor_Car_Rental.Areas.Administrator.Services
+@using Blazor_Car_Rental.Data.Services
 @inject AdmCarServices CarServices
 @inject NavigationManager nav;
+@inject RentalServices RentalService
 <div class="container home text-center">
     <h1 class="text-white home-text">Do you want to drive the car of your DREAMS?<br />You just came to the right place!</h1>
 </div>
@@ -26,7 +28,7 @@
                         <div class="down-content">
                             <span>from <sup>$</sup>@car.Price per day</span>
                             <p style="font-weight:bold">Make: @car.Make | Model: @car.Model</p>
-                            <p style="font-weight:bold">Fuel: @car.Fuel | Engine: @car.EngineDisplacement</p>
+                            <p style="font-weight:bold">Fuel: @car.Fuel | Engine: @car.EngineDisplacement L</p>
                             <p>
                                 <i class="fa fa-table" title="year"></i>@car.Year &nbsp;&nbsp;&nbsp;
                                 <i class="fa fa-briefcase" title="luggages"></i> @car.Luggages &nbsp;&nbsp;&nbsp;
@@ -35,6 +37,7 @@
                                 <i class="" title="power"></i>@car.Power HP
                             </p>
                             <p>Rented: @car.rentalcount times!</p>
+                            <p>Rated: @RentalService.getReview(car.Id) stars</p>
                             <input type="button" class="btn btn-success" value="Rent" @onclick="() => RentCar(car.Id)" />
                         </div>
                     </div>

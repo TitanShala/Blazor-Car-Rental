@@ -11,6 +11,7 @@
 @inject AdmCarServices CarServices
 @inject NavigationManager nav
 @inject IJSRuntime JSRuntime
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
 
 <h3>RentalCreate</h3>
 
@@ -64,8 +65,15 @@
 
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await sessionStorage.SetItemAsync("name", "Veture");
+        
+    }
+
     private async Task CreateNewRental()
     {
+        rental.Paid = false;
         await RentalService.CreateCarAsync(rental, CarId, username);
         nav.NavigateTo("/cars");
     }
@@ -73,7 +81,7 @@
     {
         nav.NavigateTo("/cars");
     }
-    
+
     public async void check()
     {
         await JSRuntime.InvokeVoidAsync("check");

@@ -31,5 +31,7 @@ namespace Blazor_Car_Rental.Data.Models
         public bool Returned { get; set; }
 
         public int? Rate { get; set; }
+
+        public Boolean Paid { get; set; }
     }
 }

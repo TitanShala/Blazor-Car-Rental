@@ -26,27 +26,37 @@ else
                 <th>User</th>
                 <th>ReceiptDate</th>
                 <th>Return Date</th>
-                <th>Rented</th>
+                <th>Returned</th>
+                <td>Paid</td>
                 <th>Car Image</th>
+                <th>Set to Returned</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var rental in RentalList)
             {
                 IdentityUser user = RentalService.getRentalUser(rental.UserId);
-                <tr>
-                    <td>@rental.Car.Make @rental.Car.Model</td>
-                    <td>@user.UserName</td>
-                    <td>@rental.ReceiptDate</td>
-                    <td>@rental.ReturnDate</td>
-                    <td>@rental.Returned</td>
-                    <td><img src="../CarImages/@rental.Car.ImageName" class="img-fluid table-image" /></td>
-                    <td>
-                        <div style="display:flex; flex-direction:row; justify-content:center; align-items:center;">
+            <tr>
+                <td>@rental.Car.Make @rental.Car.Model</td>
+                <td>@user.UserName</td>
+                <td>@rental.ReceiptDate</td>
+                <td>@rental.ReturnDate</td>
+                <td>@rental.Returned</td>
+                <td>@rental.Paid</td>
+                <td><img src="../CarImages/@rental.Car.ImageName" class="img-fluid table-image" /></td>
+                <td>
+                    <div style="display:flex; flex-direction:row; justify-content:center; align-items:center;">
+                        @if (rental.Returned == false || rental.Returned == null)
+                        {
                             <input type="button" class="btn btn-info" value="Finish" @onclick="() => SetToReturned(rental)" />
-                        </div>
-                    </td>
-                </tr>
+                        }
+                        else
+                        {
+                            <input disabled type="button" class="btn btn-info" value="Finish" @onclick="() => SetToReturned(rental)" />
+                        }
+                    </div>
+                </td>
+            </tr>
             }
         </tbody>
     </table>

@@ -18,6 +18,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blazor_Car_Rental.Data.Services;
 using Blazor_Car_Rental.Areas.Identity.Models;
+using Blazored.SessionStorage;
 
 namespace Blazor_Car_Rental
 {
@@ -46,6 +47,7 @@ namespace Blazor_Car_Rental
             services.AddScoped<RentalServices>();
             services.AddScoped<IFileUpload, FileUpload>();
             services.AddScoped<MessageService>();
+            services.AddBlazoredSessionStorage();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

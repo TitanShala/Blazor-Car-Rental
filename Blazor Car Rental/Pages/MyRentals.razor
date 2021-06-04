@@ -9,6 +9,7 @@
 @inject NavigationManager nav;
 @inject IFileUpload fileUpload;
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
 
 <h1 class="text-center text-white bg-dark">My Rentals List</h1>
 
@@ -25,9 +26,10 @@ else
                 <th>Car</th>
                 <th>ReceiptDate</th>
                 <th>Return Date</th>
-                <th>Rented</th>
+                <th>Rated</th>
                 <th>Car Image</th>
                 <th>Review with one to five</th>
+                <th>Pay Online. 10% Discount</th>
             </tr>
         </thead>
         <tbody>
@@ -35,13 +37,17 @@ else
             {
                 <tr>
                     <td>@rental.Car.Make @rental.Car.Model</td>
-                    <td>@rental.ReceiptDate</td>
-                    <td>@rental.ReturnDate</td>
+                    <td>@rental.ReceiptDate.Day/@rental.ReceiptDate.Month/@rental.ReceiptDate.Year</td>
+                    <td>@rental.ReturnDate.Day/@rental.ReturnDate.Month/@rental.ReturnDate.Year</td>
                     <td>@rate</td>
                     <td><img src="../CarImages/@rental.Car.ImageName" class="img-fluid table-image" /></td>
                     <td>
-                        <div style="display:flex; flex-direction:row; justify-content:center; align-items:center;">
-                            @if (rental.Rate == 0 || rental.Rate == null)
+                        <div style="display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                            @if (rental.Returned == false)
+                            {
+                            <p>Not returned yet</p>
+                            }
+                            else if (rental.Rate == 0 || rental.Rate == null)
                             {
                                 <select @bind="rate" name="selected" class="form-control">
                                     <option disabled>Review</option>
@@ -51,11 +57,7 @@ else
                                     <option>4</option>
                                     <option>5</option>
                                 </select>
-                                <input type="button" class="btn btn-success" value="Rate" @onclick="() => Rate(rate, rental)" />
-                            }
-                            else if (rental.Returned == false)
-                            {
-                                <p>Not returned yet</p>
+                                <input type="button" class="btn btn-success mt-3" value="Rate" @onclick="() => Rate(rate, rental)" />
                             }
                             else
                             {
@@ -63,6 +65,14 @@ else
                             }
                         </div>
                     </td>
+                    @if (rental.Paid == false)
+                    {
+                    <td><a class="btn btn-success" href="/Checkout/@rental.CarId">Checkout</a></td>
+                    }
+                    else
+                    {
+                        <td>Paid</td>
+                    }
                 </tr>
             }
         </tbody>
@@ -83,9 +93,14 @@ else
         RentalList = await RentalService.GetMyRentals(authState.User.Identity.Name);
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        var name = await sessionStorage.GetItemAsync<string>("name");
+    }
+
     void Rate(int? rate, Rental rental)
     {
-        if (rate !=  0 && rate != null)
+        if (rate != 0 && rate != null)
         {
             rental.Rate = rate;
             RentalService.Update(rental);

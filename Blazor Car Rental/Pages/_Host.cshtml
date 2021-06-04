@@ -19,57 +19,21 @@
     <link href="css/carList.css" rel="stylesheet" />
     <link href="css/Home.css" rel="stylesheet" />
 
+    <!--<link rel="stylesheet" href="/css/global.css" />-->
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+    <!--<script src="/client.js" defer></script>-->
+
 </head>
 <body>
-    <button id="checkout-button">Checkout</button>
     <app>
-        <component type="typeof(App)" render-mode="ServerPrerendered" />
+        <component type="typeof(App)" render-mode="Server" />
     </app>
 
-    <div id="blazor-error-ui">
-        <environment include="Staging,Production">
-            An error has occurred. This application may no longer respond until reloaded.
-        </environment>
-        <environment include="Development">
-            An unhandled exception has occurred. See browser dev tools for details.
-        </environment>
-        <a href="" class="reload">Reload</a>
-        <a class="dismiss">🗙</a>
-    </div>
 
     <script src="_framework/blazor.server.js"></script>
     <script src="_content/BlazorInputFile/inputfile.js"></script>
-    <script type="text/javascript">
-        console.log('12');
-        // Create an instance of the Stripe object with your publishable API key
-        var stripe = Stripe('pk_test_51Ixf90DWzkrn83GaQkUf4eBA6y4vhBbt7AloMy6GgTsGDlA2UWi9Z5HOhEZaXZOUMUliYp9BAVo6FXwd9ZQCHGDy009FnNvxnX');
-        var checkoutButton = document.getElementById('checkout-button');
-        
-        checkoutButton.addEventListener('click', 
-        function check() {
-            // Create a new Checkout Session using the server-side endpoint you
-            // created in step 3.
-            fetch('/create-checkout-session', {
-                method: 'POST',
-            })
-                .then(function (response) {
-                    return response.json();
-                })
-                .then(function (session) {
-                    return stripe.redirectToCheckout({ sessionId: session.id });
-                })
-                .then(function (result) {
-                    // If `redirectToCheckout` fails due to a browser or network
-                    // error, you should display the localized error message to your
-                    // customer using `error.message`.
-                    if (result.error) {
-                        alert(result.error.message);
-                    }
-                })
-                .catch(function (error) {
-                    console.error('Error:', error);
-                });
-        });
-    </script>
+
+
 </body>
 </html>
