@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Blazor_Car_Rental.Areas.Administrator.Services;
 using Blazor_Car_Rental.Data;
 using Blazor_Car_Rental.Data.Models;
+using Blazor_Car_Rental.Data.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
@@ -19,10 +20,12 @@ namespace Blazor_Car_Rental.Controllers
     public class PaymentIntentApiController : Controller
     {
         private AdmCarServices admCarService;
-        public PaymentIntentApiController(AdmCarServices _admCarService)
+        private RentalServices rentalService;
+        public PaymentIntentApiController(AdmCarServices _admCarService, RentalServices _rentalService)
         {
             StripeConfiguration.ApiKey = "sk_test_51Ixf90DWzkrn83Gap2f7UH0PGnb7Tt8GFGOtKh9g7DC8MpcUVzX0hQXCZ51haZzmptyvzCzrqHQlAWXhpnSeWCBN00xjKgGRHk";
             admCarService = _admCarService;
+            rentalService = _rentalService;
         }
         [HttpPost]
         public ActionResult Create(PaymentIntentCreateRequest request)
@@ -37,17 +40,27 @@ namespace Blazor_Car_Rental.Controllers
         }
         private int CalculateOrderAmount(Item[] items)
         {
+            
             int CarId;
             Car car = new Car();
             foreach(var item in items)
             {
-                CarId = Int32.Parse(item.Id);
+                Rental rental = rentalService.getRental(item.Id).Result;
+                CarId = rental.CarId;
                 car = admCarService.GetCar(CarId).Result;
             }
             int price = Convert.ToInt32(car.Price) * 100;
             price = (int)(price - (price * 0.1)); //10% DISCOUNT
             return price;
         }
+        public void Pay(PaymentIntentCreateRequest request)
+        {
+            Item item = request.Items[0];
+            Rental rental = rentalService.getRental(item.Id).Result;
+            rental.Paid = true;
+            rentalService.Update(rental);
+        }
+
         public class Item
         {
             [JsonProperty("id")]

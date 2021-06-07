@@ -18,7 +18,7 @@ namespace Blazor_Car_Rental.Data.Models
         public string UserId { get; set; }
 
         [ForeignKey("UserId")]
-        public User User { get; set; }
+        public UserIdentity User { get; set; }
 
         [Required]
         //[DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]

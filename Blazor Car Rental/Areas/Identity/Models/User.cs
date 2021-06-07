@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Blazor_Car_Rental.Areas.Identity.Models
 {
-    public class User : IdentityUser
+    public class UserIdentity : IdentityUser
     {
         ICollection<Rental> Rentals { get; set; }
     }

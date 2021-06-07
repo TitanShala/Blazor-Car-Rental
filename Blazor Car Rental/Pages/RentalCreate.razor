@@ -46,7 +46,7 @@
 
     public int CarId;
     Rental rental = new Rental();
-    User user = new User();
+    UserIdentity user = new UserIdentity();
     string username = "";
 
     protected override async Task OnInitializedAsync()
@@ -74,7 +74,7 @@
     private async Task CreateNewRental()
     {
         rental.Paid = false;
-        await RentalService.CreateCarAsync(rental, CarId, username);
+        await RentalService.CreateRentalAsync(rental, CarId, username);
         nav.NavigateTo("/cars");
     }
     private void Cancel()

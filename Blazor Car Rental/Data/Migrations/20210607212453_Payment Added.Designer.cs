@@ -4,14 +4,16 @@ using Blazor_Car_Rental.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Blazor_Car_Rental.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210607212453_Payment Added")]
+    partial class PaymentAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,12 +87,6 @@ namespace Blazor_Car_Rental.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
 
                     b.Property<int>("RentalId")
                         .HasColumnType("int");
@@ -345,11 +341,11 @@ namespace Blazor_Car_Rental.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Blazor_Car_Rental.Areas.Identity.Models.UserIdentity", b =>
+            modelBuilder.Entity("Blazor_Car_Rental.Areas.Identity.Models.User", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.HasDiscriminator().HasValue("UserIdentity");
+                    b.HasDiscriminator().HasValue("User");
                 });
 
             modelBuilder.Entity("Blazor_Car_Rental.Data.Models.Payment", b =>
@@ -369,7 +365,7 @@ namespace Blazor_Car_Rental.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Blazor_Car_Rental.Areas.Identity.Models.UserIdentity", "User")
+                    b.HasOne("Blazor_Car_Rental.Areas.Identity.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });

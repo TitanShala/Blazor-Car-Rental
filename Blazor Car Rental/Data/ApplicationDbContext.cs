@@ -17,6 +17,7 @@ namespace Blazor_Car_Rental.Data
         public DbSet<Car> Cars { get; set; }
 
         public DbSet<Rental> Rentals { get; set; }
+        public DbSet<Payment> Payments { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

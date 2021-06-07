@@ -1,0 +1,60 @@
+﻿@page "/PaymentsList"
+
+@using Blazor_Car_Rental.Data.Models
+@using Blazor_Car_Rental.Data.Services
+@using Blazor_Car_Rental.Areas.Identity.Models
+@inject PaymentService paymentService
+@inject NavigationManager nav
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject RentalServices rentalService
+@inject UserService userService
+
+@if(Payments == null)
+            {
+                <p>Loading....</p>
+            }
+else
+{          
+<table class="table table-dark">
+    <thead>
+        <tr>
+            <th>Payment Id</th>
+            <th>UserName</th>
+            <th>Price</th>
+            <th>Rental Id</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var payment in Payments)
+        {
+            Rental rental = rentalService.getRental(payment.RentalId.ToString()).Result;
+            string userName = userService.getUser(rental.UserId).Result;
+            <tr>
+                <td>@payment.Id</td>
+                <td>@userName</td>
+                <td>@payment.Price Euro</td>
+                <td>@rental.Id</td>
+                <td>@payment.Date.Day/@payment.Date.Month/@payment.Date.Year</td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
+@code {
+    private List<Payment> Payments;
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (!authState.User.Identity.IsAuthenticated)
+        {
+            nav.NavigateTo("Identity/Account/Login");
+        }
+        else if (!authState.User.IsInRole("Admin"))
+        {
+            nav.NavigateTo("/");
+        }
+        Payments = paymentService.GetPayments();
+    }
+
+}

@@ -47,6 +47,8 @@ namespace Blazor_Car_Rental
             services.AddScoped<RentalServices>();
             services.AddScoped<IFileUpload, FileUpload>();
             services.AddScoped<MessageService>();
+            services.AddScoped<PaymentService>();
+            services.AddScoped<UserService>();
             services.AddBlazoredSessionStorage();
         }
 

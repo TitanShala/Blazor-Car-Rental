@@ -46,7 +46,7 @@ else
                 <td><img src="../CarImages/@rental.Car.ImageName" class="img-fluid table-image" /></td>
                 <td>
                     <div style="display:flex; flex-direction:row; justify-content:center; align-items:center;">
-                        @if (rental.Returned == false || rental.Returned == null)
+                        @if (rental.Returned == false)
                         {
                             <input type="button" class="btn btn-info" value="Finish" @onclick="() => SetToReturned(rental)" />
                         }

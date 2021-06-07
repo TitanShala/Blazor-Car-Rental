@@ -31,10 +31,12 @@
             <div class="spinner hidden" id="spinner"></div>
             <span id="button-text">Pay now</span>
         </button>
-        <p id="card-error" role="alert"></p>
+        <p id="card-error" role="alert">
+            <a href="/MyRentals" target="_blank">Get Back to My Rentals</a>
+        </p>
         <p class="result-message hidden">
-            Payment succeeded, see the result in your
-            <a href="" target="_blank">Stripe dashboard.</a> Refresh the page to pay again.
+            Payment succeeded,
+            <a href="" target="_blank">Go to my Rentals.</a>
         </p>
     </form>
 </body>
@@ -42,13 +44,13 @@
 
 <script type="text/javascript">
     var url = window.location.pathname;
-    var Carid = url.substring(url.lastIndexOf('/') + 1);
-    console.log(Carid);
+    var RentId = url.substring(url.lastIndexOf('/') + 1);
+    console.log(RentId);
     // A reference to Stripe.js initialized with your real test publishable API key.
     var stripe = Stripe("pk_test_51Ixf90DWzkrn83GaQkUf4eBA6y4vhBbt7AloMy6GgTsGDlA2UWi9Z5HOhEZaXZOUMUliYp9BAVo6FXwd9ZQCHGDy009FnNvxnX");
     // The items the customer wants to buy
     var purchase = {
-        items: [{ id: Carid }]
+        items: [{ id: RentId }]
     };
     // Disable the button until we have Stripe set up on the page
     document.querySelector("button").disabled = true;
@@ -113,6 +115,7 @@
                 } else {
                     // The payment succeeded!
                     orderComplete(result.paymentIntent.id);
+                    
                 }
             });
     };
@@ -120,12 +123,21 @@
     // Shows a success message when the payment is complete
     var orderComplete = function (paymentIntentId) {
         loading(false);
+        fetch("/success-payment", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(purchase)
+        });
         document
             .querySelector(".result-message a")
             .setAttribute(
                 "href",
-                "https://dashboard.stripe.com/test/payments/" + paymentIntentId
-            );
+                "/MyRentals",
+                "target",
+                "_blank"
+        );
         document.querySelector(".result-message").classList.remove("hidden");
         document.querySelector("button").disabled = true;
     };

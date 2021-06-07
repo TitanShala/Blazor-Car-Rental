@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Blazor_Car_Rental.Areas.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.JSInterop;
 
 namespace Blazor_Car_Rental.Data.Services
 {
@@ -21,7 +22,7 @@ namespace Blazor_Car_Rental.Data.Services
             _hostEnivronment = hostEnivronment;
         }
 
-        public async Task<string> CreateCarAsync(Rental rental, int carId, string userName)
+        public async Task<string> CreateRentalAsync(Rental rental, int carId, string userName)
         {
             var user = await _context.Users.Where(u => u.UserName == userName).FirstOrDefaultAsync();
             string userId = user.Id;
@@ -36,7 +37,7 @@ namespace Blazor_Car_Rental.Data.Services
         }
         public async Task<List<Rental>> GetRentals ()
         {
-            List<Rental> Rentals = await _context.Rentals.Include(r=> r.Car).ToListAsync();
+            List<Rental> Rentals = _context.Rentals.Include(r=> r.Car).ToList();
             return Rentals;
         }
 
@@ -47,12 +48,6 @@ namespace Blazor_Car_Rental.Data.Services
             return Rentals;
         }
 
-        /*public Car GetRental(int id)
-        {
-            Car car = _context.Cars.FirstOrDefault(c => c.Id == id);
-            return car;
-        }
-        */
         public string Update(Rental rental)
         {
             _context.Rentals.Update(rental);
@@ -87,6 +82,14 @@ namespace Blazor_Car_Rental.Data.Services
                 a += (double)rent.Rate;
             }
             return a/rentals.Count;
+        }
+
+    
+        public async Task<Rental> getRental(string rentalId)
+        {
+            int id = Int32.Parse(rentalId);
+            Rental rental = _context.Rentals.Where(r => r.Id == id).Include(r=> r.Car).FirstOrDefault();
+            return rental;
         }
     }
 }
