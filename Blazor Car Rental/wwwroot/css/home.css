@@ -38,6 +38,7 @@ body{
     background-color: black;
     color: whitesmoke;
     border:2px solid gray!important;
+    z-index:0;
 }
 .top-cars .btn {
     background-color: darkred;
@@ -68,4 +69,7 @@ body{
     font-size:20px;
     letter-spacing:3px;
     padding: 10px 20px;
+}
+.top-row {
+    z-index: 999;
 }
