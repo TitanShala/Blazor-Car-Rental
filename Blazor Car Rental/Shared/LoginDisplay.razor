@@ -1,8 +1,8 @@
 ﻿<AuthorizeView>
     <Authorized>
-        <a href="Identity/Account/Manage">Hello, @context.User.Identity.Name!</a>
+        <a class="text-white" href="Identity/Account/Manage">Hello, @context.User.Identity.Name!</a>
         <form method="post" action="Identity/Account/LogOut">
-            <button type="submit" class="nav-link btn btn-link">Log out</button>
+            <button type="submit" class="btn btn-danger mr-md-3 ml-md-3">Log out</button>
         </form>
     </Authorized>
     <NotAuthorized>

@@ -1,0 +1,59 @@
+﻿@page "/RentCars"
+@using Blazor_Car_Rental.Data.Models
+@using Blazor_Car_Rental.Areas.Administrator.Services
+@using Blazor_Car_Rental.Data.Services
+@inject AdmCarServices CarService
+@inject RentalServices RentalService
+@inject NavigationManager nav;
+
+<h3 class="text-white text-center">Cars</h3>
+@if (cars == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <section class="top-cars-section pt-5 text-center">
+        <div class="container top-cars">
+            <div class="row">
+                @foreach (var car in cars)
+                {
+                    <div class="col-lg-4 col-md-4 mb-3">
+                        <div class="trainer-item">
+                            <div class="image-thumb">
+                                <a><img src="../CarImages/@car.ImageName" class="img-fluid" /></a>
+                            </div>
+                            <div class="down-content">
+                                <span>from <sup>$</sup>@car.Price per day</span>
+                                <p style="font-weight:bold">Make: @car.Make | Model: @car.Model</p>
+                                <p style="font-weight:bold">Fuel: @car.Fuel | Engine: @car.EngineDisplacement L</p>
+                                <p>
+                                    <i class="fa fa-table" title="year"></i>@car.Year &nbsp;&nbsp;&nbsp;
+                                    <i class="fa fa-briefcase" title="luggages"></i> @car.Luggages &nbsp;&nbsp;&nbsp;
+                                    <i class="fa fa-sign-out" title="doors"></i> @car.Doors &nbsp;&nbsp;&nbsp;
+                                    <i class="fa fa-cog" title="transmission"></i> @car.Transmission
+                                    <i class="" title="power"></i>@car.Power HP
+                                </p>
+                                <p>Rented: @car.rentalcount times!</p>
+                                <p>Rated: @string.Format("{0:0.0}", RentalService.getReview(car.Id))  stars</p>
+                                <input type="button" class="btn btn-success" value="Rent" @onclick="() => RentCar(car.Id)" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+@code {
+    private List<Car> cars;
+    protected override async Task OnInitializedAsync()
+    {
+        cars = await CarService.GetCars();
+    }
+    async Task RentCar(int id)
+    {
+        nav.NavigateTo("/RentalCreate/" + id);
+    }
+
+}

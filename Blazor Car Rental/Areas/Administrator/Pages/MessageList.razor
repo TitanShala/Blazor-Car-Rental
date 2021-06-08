@@ -61,12 +61,13 @@ else
         {
             nav.NavigateTo("/");
         }
+        Messages = MessageServices.GetMessages();
     }
 
     public async Task Delete(string id)
     {
         MessageServices.DeleteMessage(id);
-        Messages = await MessageServices.GetMessages();
+        Messages = MessageServices.GetMessages();
     }
 
 }

@@ -1,0 +1,14 @@
+﻿body {
+}
+.contact-section {
+    background-image: url('../Images/contact.jpg');
+    background-repeat: repeat-x;
+    background-size: cover;
+    background-position: center;
+    min-height: 95vh;
+    min-width: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

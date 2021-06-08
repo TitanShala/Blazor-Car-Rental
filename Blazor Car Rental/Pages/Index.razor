@@ -9,17 +9,11 @@
     <h1 class="text-white home-text">Do you want to drive the car of your DREAMS?<br />You just came to the right place!</h1>
 </div>
 <section class="top-cars-section pt-5 text-center">
+    <h1 class="mb-5">Top Cars</h1>
     <div class="container top-cars">
         <div class="row">
             @foreach (var car in TopCars)
             {
-                /*<div class="col-md-4">
-                    <img src="../CarImages/@car.ImageName" class="img-fluid" />
-                    <h3>@car.Make</h3>
-                    <p>@car.Model</p>
-                    <p>Rented: @car.rentalcount</p>
-                    <input type="button" class="btn btn-success" value="Rent" @onclick="() => RentCar(car.Id)" />
-                </div>*/
                 <div class="col-lg-4 col-md-4">
                     <div class="trainer-item">
                         <div class="image-thumb">
@@ -43,6 +37,15 @@
                     </div>
                 </div>
             }
+        </div>
+        <input type="button" class="btn mt-4" value="Check Cars" />
+    </div>
+</section>
+<section class="about mt-5">
+    <div class="container">
+        <h1>About Us</h1>
+        <div class="about-content">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel libero eu metus pharetra consectetur a commodo velit. In pulvinar arcu vel elementum condimentum. Aliquam elementum commodo finibus. Curabitur vel dignissim diam. Cras dui quam, iaculis sed ultricies a, feugiat et velit. Curabitur neque felis, dictum quis sapien ac, lobortis porttitor orci. Proin vitae sapien sit amet lectus imperdiet laoreet sit amet vitae nisi. Nulla vulputate massa libero, dictum vehicula lacus hendrerit eu. Sed quis velit ac erat auctor volutpat non a ipsum. Curabitur porttitor volutpat mi, et mattis urna mollis eu. Sed enim neque, hendrerit ut porttitor vel, porta.</p>
         </div>
     </div>
 </section>

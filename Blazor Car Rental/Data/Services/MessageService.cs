@@ -20,9 +20,9 @@ namespace Blazor_Car_Rental.Data.Services
             _messageTable = _database.GetCollection<Message>("Message");
         }
 
-        public async Task<List<Message>> GetMessages()
+        public List<Message> GetMessages()
         {
-            List<Message> Messages = await _messageTable.Find(FilterDefinition<Message>.Empty).ToListAsync();
+            List<Message> Messages = _messageTable.Find(FilterDefinition<Message>.Empty).ToList();
             return Messages;
         }
 
