@@ -15,6 +15,53 @@ else
 {
     <section class="top-cars-section pt-5 text-center">
         <div class="container top-cars">
+            <div class="form-row">
+                <!--Sorting Container-->
+                <div class="col-md-6">
+                    <p>Sort by:</p>
+                    <div>                        
+                        <button @onclick="() => SortPrice()" class="bg-success"><i class="fa fa-sort" aria-hidden="true"></i>Price</button>
+                        <button @onclick="() => SortYear()" class="bg-success"><i class="fa fa-sort" aria-hidden="true"></i>Year</button>
+                    </div>
+                </div>
+                <!--Filtering Container-->
+                <div class="col-md-6">
+                    <div class="form-row">
+                        <form>
+                            <!--Transmission Filter-->
+                            <p>Transmission:</p>
+                            <lable>
+                                <input type="radio" name="transmission" checked=@(TransmissionFilter.Equals("Automatic")) @onclick='() =>TransmissionFilter="Automatic"' />Automatic
+                            </lable>
+                            <lable>
+                                <input type="radio" name="transmission" checked=@(TransmissionFilter.Equals("Manual")) @onclick='() =>TransmissionFilter="Manual"' />Manual
+                            </lable>
+                            <p>@TransmissionFilter</p>
+
+                            <!--Fuel Filter-->
+                            <lable>
+                                <input type="radio" name="group" checked=@(FuelFilter.Equals("Diesel")) @onclick='() =>FuelFilter="Diesel"' />Diesel
+                            </lable>
+                            <lable>
+                                <input type="radio" name="group" checked=@(FuelFilter.Equals("Gasoline")) @onclick='() =>FuelFilter="Gasoline"' />Gasoline
+                            </lable>
+                            <lable>
+                                <input type="radio" name="group" checked=@(FuelFilter.Equals("Hybrid")) @onclick='() =>FuelFilter="Hybrid"' />Hybrid
+                            </lable>
+                            <lable>
+                                <input type="radio" name="group" checked=@(FuelFilter.Equals("Electricity")) @onclick='() =>FuelFilter="Electricity"' />Electricity
+                            </lable>
+
+                            <p>@FuelFilter</p>
+
+                            <input type="text" pattern="Search" @bind="Search"/>
+                            <input type="button" @onclick="SearchCars" value="Search" />
+                            <input type="button" @onclick="RemoveFilters" value="RemoveFilters" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+
             <div class="row">
                 @foreach (var car in cars)
                 {
@@ -46,14 +93,106 @@ else
     </section>
 }
 @code {
+    private string FuelFilter = "none";
+    private string TransmissionFilter = "none";
+    private string SortbyPrice;
+    private string SortbyYear;
+    private string Search ;
+
+    private List<Car> AllCars;
     private List<Car> cars;
     protected override async Task OnInitializedAsync()
     {
         cars = await CarService.GetCars();
+        AllCars = cars;
     }
     async Task RentCar(int id)
     {
         nav.NavigateTo("/RentalCreate/" + id);
+    }
+    async Task SortPrice()
+    {
+        if(SortbyPrice == null || SortbyPrice.Equals("Ascending"))
+        {
+            SortbyPrice = "Descending";
+            cars = cars.OrderByDescending(c => c.Price).ToList();
+        }
+        else
+        {
+            cars = cars.OrderBy(c => c.Price).ToList();
+            SortbyPrice = "Ascending";
+        }
+
+    }
+
+    async Task SortYear()
+    {
+        if (SortbyYear == null || SortbyYear.Equals("Ascending"))
+        {
+            SortbyYear = "Descending";
+            cars = cars.OrderByDescending(c => c.Year).ToList();
+        }
+        else
+        {
+            cars = cars.OrderBy(c => c.Year).ToList();
+            SortbyYear = "Ascending";
+        }
+
+    }
+
+    async Task SearchCars()
+    {
+        var counter = 0;
+        if (!FuelFilter.Equals("none"))
+        {
+            counter++;
+            switch (FuelFilter)
+            {
+                case "Diesel":
+                    cars = AllCars.Where(c => c.Fuel.Equals("Diesel")).ToList();
+                    break;
+                case "Gasoline":
+                    cars = AllCars.Where(c => c.Fuel.Equals("Gasoline")).ToList();
+                    break;
+                case "Electricity":
+                    cars = AllCars.Where(c => c.Fuel.Equals("Electricity")).ToList();
+                    break;
+                case "Hybrid":
+                    cars = AllCars.Where(c => c.Fuel.Equals("Hybrid")).ToList();
+                    break;
+                default:
+                    cars = AllCars;
+                    break;
+            }
+        }
+
+        if (!String.IsNullOrEmpty(Search))
+        {
+            Search = Search.ToLower();
+            if (counter > 0)
+                cars = cars.Where(c => c.Make.ToLower().Contains(Search) || c.Model.ToLower().Contains(Search)).ToList();
+            else
+                cars = AllCars.Where(c => c.Make.ToLower().Contains(Search) || c.Model.ToLower().Contains(Search)).ToList();
+
+            counter++;
+        }
+
+
+        if (!TransmissionFilter.Equals("none"))
+        {
+            if (counter > 0)
+                cars =cars.Where(c => c.Transmission.Equals(TransmissionFilter)).ToList();
+            else
+                cars = AllCars.Where(c => c.Transmission.Equals(TransmissionFilter)).ToList();
+
+        }
+    }
+    async Task RemoveFilters()
+    {
+        cars = AllCars;
+        TransmissionFilter = "none";
+        FuelFilter = "none";
+        Search = null;
     }
 
 }

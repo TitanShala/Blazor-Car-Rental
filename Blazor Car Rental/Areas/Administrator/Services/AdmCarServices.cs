@@ -78,5 +78,11 @@ namespace Blazor_Car_Rental.Areas.Administrator.Services
             _context.SaveChanges();
             return "Car Deleted Succesfully";
         }
+
+        public List<Car> SortbyPrice()
+        {
+            List<Car> cars = GetCars().Result;
+            return cars.OrderByDescending(c => c.Price).ToList();
+        }
     }
 }

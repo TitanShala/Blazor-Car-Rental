@@ -22,9 +22,9 @@ namespace Blazor_Car_Rental.Data.Services
             _hostEnivronment = hostEnivronment;
         }
 
-        public async Task<string> CreateRentalAsync(Rental rental, int carId, string userName)
+        public string CreateRental(Rental rental, int carId, string userName)
         {
-            var user = await _context.Users.Where(u => u.UserName == userName).FirstOrDefaultAsync();
+            var user = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
             string userId = user.Id;
             rental.UserId = userId;
             rental.CarId = carId;
@@ -90,6 +90,30 @@ namespace Blazor_Car_Rental.Data.Services
             int id = Int32.Parse(rentalId);
             Rental rental = _context.Rentals.Where(r => r.Id == id).Include(r=> r.Car).FirstOrDefault();
             return rental;
+        }
+
+        public bool ValidOrderDate(DateTime RecDate, DateTime RetDate,DateTime? today, int carId)
+        {
+            Car car = _context.Cars.Where(c => c.Id == carId).FirstOrDefault();
+            //check if time is valid
+            //DateTime? today = DateTime.Today;
+            if (RecDate < today || RecDate > RetDate)
+            {
+                return false;
+            }
+
+            //Check if client choosed a bussy slot
+            //List<Rental> rentals = car.Rentals.ToList();
+            List<Rental> rentals = _context.Rentals.Where(r => r.CarId == carId && r.Returned == false).ToList();
+            rentals = rentals.OrderBy(r => r.ReceiptDate).ToList();
+            foreach (var rent in rentals)
+            {
+                if ((RecDate >= rent.ReceiptDate && RecDate <= rent.ReturnDate) || (RetDate >= rent.ReceiptDate && RetDate <= rent.ReturnDate))               
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }
