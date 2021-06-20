@@ -36,9 +36,10 @@ else
                             <lable>
                                 <input type="radio" name="transmission" checked=@(TransmissionFilter.Equals("Manual")) @onclick='() =>TransmissionFilter="Manual"' />Manual
                             </lable>
-                            <p>@TransmissionFilter</p>
 
                             <!--Fuel Filter-->
+                            <br>
+                            <p>Fuel</p>
                             <lable>
                                 <input type="radio" name="group" checked=@(FuelFilter.Equals("Diesel")) @onclick='() =>FuelFilter="Diesel"' />Diesel
                             </lable>
@@ -52,10 +53,8 @@ else
                                 <input type="radio" name="group" checked=@(FuelFilter.Equals("Electricity")) @onclick='() =>FuelFilter="Electricity"' />Electricity
                             </lable>
 
-                            <p>@FuelFilter</p>
-
-                            <input type="text" pattern="Search" @bind="Search"/>
-                            <input type="button" @onclick="SearchCars" value="Search" />
+                            <input type="text" placeholder="Search by make and model" @bind="Search"/>
+                            <input type="button" @onkeydown="@Enter" @onclick="SearchCars" value="Search" />
                             <input type="button" @onclick="RemoveFilters" value="RemoveFilters" />
                         </form>
                     </div>
@@ -193,6 +192,14 @@ else
         TransmissionFilter = "none";
         FuelFilter = "none";
         Search = null;
+    }
+
+    public void Enter(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            SearchCars();
+        }
     }
 
 }
