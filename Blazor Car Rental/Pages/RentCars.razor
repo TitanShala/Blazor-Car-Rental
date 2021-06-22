@@ -6,18 +6,18 @@
 @inject RentalServices RentalService
 @inject NavigationManager nav;
 
-<h3 class="text-white text-center">Cars</h3>
+<h3 class="text-white text-center mt-5">Cars</h3>
 @if (cars == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <section class="top-cars-section pt-5 text-center">
+    <section class="top-cars-section pt-5 text-center rentcars">
         <div class="container top-cars">
             <div class="form-row">
                 <!--Sorting Container-->
-                <div class="col-md-6">
+                <div class="col-md-4 mt-5">
                     <p>Sort by:</p>
                     <div>                        
                         <button @onclick="() => SortPrice()" class="bg-success"><i class="fa fa-sort" aria-hidden="true"></i>Price</button>
@@ -25,37 +25,62 @@ else
                     </div>
                 </div>
                 <!--Filtering Container-->
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <div class="form-row">
                         <form>
-                            <!--Transmission Filter-->
-                            <p>Transmission:</p>
-                            <lable>
-                                <input type="radio" name="transmission" checked=@(TransmissionFilter.Equals("Automatic")) @onclick='() =>TransmissionFilter="Automatic"' />Automatic
-                            </lable>
-                            <lable>
-                                <input type="radio" name="transmission" checked=@(TransmissionFilter.Equals("Manual")) @onclick='() =>TransmissionFilter="Manual"' />Manual
-                            </lable>
+                            <!--Date Filter-->
+                            <input value="Filter" type="button" class="btn btn-info mb-5" @onclick="() => enableFiltering()"/>
+                            <div  style="display:@filtering">
+                                <div class="row">
+                                    <p class="col-12 text-center">Choose receipt date and return date!</p>
+                                    <div class="form-group col-6">
+                                        <label class="control-label">Receipt Date</label>
+                                        <input disabled="@isDisabled" type="date" class="form-control" @bind="receiptDate" />
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label class="control-label">Return Date</label>
+                                        <input disabled="@isDisabled" type="date" class="form-control" @bind="returnDate" />
+                                    </div>
+                                    <input class="text-right" type="checkbox" @bind-value="isDisabled" />Disable/Enable Data Filtering
+                                    <p class="error text-danger">@error</p>
+                                </div>
+                                <div class="row mt-4 mb-4">
+                                    <!--Transmission Filter-->
+                                    <div class="transmission col-6">
+                                        <p>Transmission:</p>
+                                        <lable>
+                                            <input type="radio" name="transmission" checked=@(TransmissionFilter.Equals("Automatic")) @onclick='() =>TransmissionFilter="Automatic"' />Automatic
+                                        </lable>
+                                        <lable>
+                                            <input type="radio" name="transmission" checked=@(TransmissionFilter.Equals("Manual")) @onclick='() =>TransmissionFilter="Manual"' />Manual
+                                        </lable>
+                                    </div>
+                                    <div class="fuel col-6">
+                                        <!--Fuel Filter-->
+                                        <p>Fuel</p>
+                                        <lable>
+                                            <input type="radio" name="group" checked=@(FuelFilter.Equals("Diesel")) @onclick='() =>FuelFilter="Diesel"' />Diesel
+                                        </lable>
+                                        <lable>
+                                            <input type="radio" name="group" checked=@(FuelFilter.Equals("Gasoline")) @onclick='() =>FuelFilter="Gasoline"' />Gasoline
+                                        </lable>
+                                        <lable>
+                                            <input type="radio" name="group" checked=@(FuelFilter.Equals("Hybrid")) @onclick='() =>FuelFilter="Hybrid"' />Hybrid
+                                        </lable>
+                                        <lable>
+                                            <input type="radio" name="group" checked=@(FuelFilter.Equals("Electricity")) @onclick='() =>FuelFilter="Electricity"' />Electricity
+                                        </lable>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <!--Fuel Filter-->
-                            <br>
-                            <p>Fuel</p>
-                            <lable>
-                                <input type="radio" name="group" checked=@(FuelFilter.Equals("Diesel")) @onclick='() =>FuelFilter="Diesel"' />Diesel
-                            </lable>
-                            <lable>
-                                <input type="radio" name="group" checked=@(FuelFilter.Equals("Gasoline")) @onclick='() =>FuelFilter="Gasoline"' />Gasoline
-                            </lable>
-                            <lable>
-                                <input type="radio" name="group" checked=@(FuelFilter.Equals("Hybrid")) @onclick='() =>FuelFilter="Hybrid"' />Hybrid
-                            </lable>
-                            <lable>
-                                <input type="radio" name="group" checked=@(FuelFilter.Equals("Electricity")) @onclick='() =>FuelFilter="Electricity"' />Electricity
-                            </lable>
-
-                            <input type="text" placeholder="Search by make and model" @bind="Search"/>
-                            <input type="button" @onkeydown="@Enter" @onclick="SearchCars" value="Search" />
-                            <input type="button" @onclick="RemoveFilters" value="RemoveFilters" />
+                            <div class="row mb-5">
+                                <input class="col-8" type="text" placeholder="Search by make and model" @bind="Search" />
+                                <div class="col-12 mt-3">
+                                    <input class="btn btn-success mr-2" type="button" @onclick="SearchCars" value="Search" />
+                                    <input class="btn btn-danger" type="button" @onclick="RemoveFilters" value="RemoveFilters" />
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -81,8 +106,8 @@ else
                                     <i class="" title="power"></i>@car.Power HP
                                 </p>
                                 <p>Rented: @car.rentalcount times!</p>
-                                <p>Rated: @string.Format("{0:0.0}", RentalService.getReview(car.Id))  stars</p>
-                                <input type="button" class="btn btn-success" value="Rent" @onclick="() => RentCar(car.Id)" />
+                                <p>Rated: @string.Format("{0:0.0}", getReview(car.Id))  stars</p>
+                                <input type="button" class="btn btn-success btn-1" value="Rent" @onclick="() => RentCar(car.Id)" />
                             </div>
                         </div>
                     </div>
@@ -97,13 +122,21 @@ else
     private string SortbyPrice;
     private string SortbyYear;
     private string Search ;
+    DateTime receiptDate;
+    DateTime returnDate;
+    DateTime? today = DateTime.Today;
+    string error = "";
+    bool isDisabled = false;
+    string filtering = "none";
 
     private List<Car> AllCars;
     private List<Car> cars;
     protected override async Task OnInitializedAsync()
     {
-        cars = await CarService.GetCars();
+        cars = CarService.GetCars();
         AllCars = cars;
+        returnDate = (DateTime)today;
+        receiptDate = (DateTime)today;
     }
     async Task RentCar(int id)
     {
@@ -142,6 +175,22 @@ else
     async Task SearchCars()
     {
         var counter = 0;
+
+        if (isDisabled == false)
+        {
+            //check if time is valid
+
+            if (receiptDate < today || receiptDate > returnDate)
+            {
+                error = "Choose a valid date!";
+                return;
+            }
+            cars = RentalService.getFilteredCars(receiptDate, returnDate , AllCars);
+            //AllCars = cars;
+            counter++;
+            error = "method finish";
+        }
+
         if (!FuelFilter.Equals("none"))
         {
             counter++;
@@ -185,21 +234,29 @@ else
                 cars = AllCars.Where(c => c.Transmission.Equals(TransmissionFilter)).ToList();
 
         }
+        error = "";
+
     }
     async Task RemoveFilters()
     {
-        cars = AllCars;
+        cars = CarService.GetCars();
+        AllCars = cars;
         TransmissionFilter = "none";
         FuelFilter = "none";
         Search = null;
+        error = "";
+        isDisabled = true;
     }
 
-    public void Enter(KeyboardEventArgs e)
+    double getReview(int carId) {
+        return RentalService.getReview(carId);
+    }
+
+    void enableFiltering()
     {
-        if (e.Code == "Enter" || e.Code == "NumpadEnter")
-        {
-            SearchCars();
-        }
+        if(filtering.Equals("none"))
+            filtering = "block";
+        else
+            filtering = "none";
     }
-
 }

@@ -32,7 +32,7 @@
                             </p>
                             <p>Rented: @car.rentalcount times!</p>
                             <p>Rated: @string.Format("{0:0.0}", RentalService.getReview(car.Id))  stars</p>
-                            <input type="button" class="btn btn-success" value="Rent" @onclick="() => RentCar(car.Id)" />
+                            <input type="button" class="btn btn-success btn-1" value="Rent" @onclick="() => RentCar(car.Id)" />
                         </div>
                     </div>
                 </div>

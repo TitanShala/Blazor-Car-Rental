@@ -27,7 +27,6 @@ else
                 <th class="secondary-data">Fuel</th>
                 <th class="secondary-data">Engine</th>
                 <th>Price</th>
-                <th>Rented</th>
                 <th>Image</th>
                 <th>Rate</th>
                 <th><input class="btn btn-success mb-3" type="button" @onclick="@AddNewCar" value="Add New Car" /></th>
@@ -47,7 +46,6 @@ else
                     <td class="secondary-data">@car.Fuel</td>
                     <td class="secondary-data">@car.EngineDisplacement</td>
                     <td>@car.Price</td>
-                    <td>@car.Rented</td>
                     <td><img src="../CarImages/@car.ImageName" class="img-fluid table-image" /></td>
                     <td>@string.Format("{0:0.0}", RentalService.getReview(car.Id))</td>
                     <td>
@@ -69,7 +67,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        cars = await CarService.GetCars();
+        cars = CarService.GetCars();
     }
 
     void AddNewCar()
@@ -95,6 +93,6 @@ else
     {
         await fileUpload.DeleteOldImage(imageName);
         CarService.DeleteCar(id);
-        cars = await CarService.GetCars();
+        cars = CarService.GetCars();
     }
 }

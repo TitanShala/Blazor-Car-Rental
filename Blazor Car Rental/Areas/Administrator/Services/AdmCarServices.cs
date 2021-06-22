@@ -31,9 +31,9 @@ namespace Blazor_Car_Rental.Areas.Administrator.Services
             return "Car Created Succesfully";
         } 
 
-        public async Task<List<Car>> GetCars()
+        public List<Car> GetCars()
         {
-            List<Car> Cars = await _context.Cars.ToListAsync();
+            List<Car> Cars = _context.Cars.ToList();
             return Cars;
         }
 
@@ -81,7 +81,7 @@ namespace Blazor_Car_Rental.Areas.Administrator.Services
 
         public List<Car> SortbyPrice()
         {
-            List<Car> cars = GetCars().Result;
+            List<Car> cars = GetCars();
             return cars.OrderByDescending(c => c.Price).ToList();
         }
     }

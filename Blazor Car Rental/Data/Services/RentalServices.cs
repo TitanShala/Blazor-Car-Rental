@@ -115,5 +115,41 @@ namespace Blazor_Car_Rental.Data.Services
             }
             return true;
         }
+
+        public List<Car> getFilteredCars(DateTime RecDate, DateTime RetDate, List<Car> allCars)
+        {
+            List<Car> cars = new List<Car>();
+            foreach(var c in allCars)
+            {
+                List<Rental> rentals = _context.Rentals.Where(r => r.Car == c).ToList();
+                List<Rental> returnedRentals = rentals.Where(r => r.Returned == true).ToList();
+
+                // 1) check if car doesn't have rentals
+                // 2) check if all car rentals are returned 
+                // 3) check if car is free for the requested dates
+                if (rentals.Count < 1)
+                {
+                    cars.Add(c);
+                }
+                else if(returnedRentals.Count == rentals.Count)
+                {
+                    cars.Add(c);
+                }
+                else
+                {
+                    rentals = rentals.OrderBy(r => r.ReceiptDate).ToList();
+                    foreach (var rent in rentals)
+                    {
+                        if ( !(rent.ReceiptDate >= RecDate && rent.ReturnDate <= RetDate) )
+                        {
+                            cars.Add(rent.Car);
+                        }
+                    }
+                }
+
+            }
+
+            return cars ;
+        }
     }
 }
