@@ -17,7 +17,7 @@ else
         <div class="container top-cars">
             <div class="form-row">
                 <!--Sorting Container-->
-                <div class="col-md-4 mt-5">
+                <div class="col-2 mt-5">
                     <p>Sort by:</p>
                     <div>                        
                         <button @onclick="() => SortPrice()" class="bg-success"><i class="fa fa-sort" aria-hidden="true"></i>Price</button>
@@ -25,12 +25,23 @@ else
                     </div>
                 </div>
                 <!--Filtering Container-->
-                <div class="col-md-8">
+                <div class="col-md-10">
                     <div class="form-row">
-                        <form>
+                        <form class="col-12">
+                            <div class="row mb-5">
+                                <div class="col-12">
+                                    <div class="row d-flex justify-content-center">
+                                        <input class="col-9 search mr-2" type="text" placeholder="Search by make and model" @bind="Search" />
+                                        <input class="btn btn-danger" type="button" @onclick="SearchCars" value="Search" />
+                                    </div>
+                                </div>
+                                <div class="col-12 mt-3">
+                                    <input class="btn btn-danger" type="button" @onclick="RemoveFilters" value="RemoveFilters" />
+                                </div>
+                            </div>
                             <!--Date Filter-->
-                            <input value="Filter" type="button" class="btn btn-info mb-5" @onclick="() => enableFiltering()"/>
-                            <div  style="display:@filtering">
+                            <input value="Filter" type="button" class="btn btn-info mb-5" @onclick="() => enableFiltering()" />
+                            <div style="display:@filtering">
                                 <div class="row">
                                     <p class="col-12 text-center">Choose receipt date and return date!</p>
                                     <div class="form-group col-6">
@@ -74,13 +85,7 @@ else
                                 </div>
                             </div>
 
-                            <div class="row mb-5">
-                                <input class="col-8" type="text" placeholder="Search by make and model" @bind="Search" />
-                                <div class="col-12 mt-3">
-                                    <input class="btn btn-success mr-2" type="button" @onclick="SearchCars" value="Search" />
-                                    <input class="btn btn-danger" type="button" @onclick="RemoveFilters" value="RemoveFilters" />
-                                </div>
-                            </div>
+
                         </form>
                     </div>
                 </div>
