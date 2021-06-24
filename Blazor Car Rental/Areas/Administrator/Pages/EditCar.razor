@@ -100,7 +100,10 @@
 
         if (file != null)
         {
-            await fileUpload.DeleteOldImage(car.ImageName);
+            if (car.ImageName != null){
+                await fileUpload.DeleteOldImage(car.ImageName);
+            }
+
             string fileName = Path.GetFileNameWithoutExtension(file.Name) + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(file.Name); ;
             car.ImageName = fileName;
 

@@ -1,12 +1,37 @@
 ﻿body {
 }
+*:focus{
+    outline:none!important;
+}
+*:active {
+    border: none !important;
+    outline: none !important;
+}
 .search{
     background-color:darkred;
     color:white;
     padding: 6px 10px;
-    border:2px solid white;
+    border:none;
     border-radius:20px;
+}
+.search::placeholder{
+    color:white;
 }
 .search:active{
     border:none;
+}
+.sorting-container button{
+    background-color:red;
+    color:black;
+    padding:3px 7px;
+    border-radius: 20px;
+}
+button:focus {
+    outline: none;
+}
+.add-filtering button {
+    background-color: red;
+    color: black;
+    padding: 3px 7px;
+    border-radius:3px;
 }

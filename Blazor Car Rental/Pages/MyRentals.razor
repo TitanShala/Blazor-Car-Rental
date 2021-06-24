@@ -28,7 +28,7 @@ else
                 <th>Return Date</th>
                 <th>Rated</th>
                 <th>Car Image</th>
-                <th>Review with one to five</th>
+                <th>Review <i class="fa fa-star" aria-hidden="true"></i></th>
                 <th>Pay Online. 10% Discount</th>
             </tr>
         </thead>
@@ -39,7 +39,7 @@ else
                     <td>@rental.Car.Make @rental.Car.Model</td>
                     <td>@rental.ReceiptDate.Day/@rental.ReceiptDate.Month/@rental.ReceiptDate.Year</td>
                     <td>@rental.ReturnDate.Day/@rental.ReturnDate.Month/@rental.ReturnDate.Year</td>
-                    <td>@string.Format("{0:0.0}", rental.Rate)</td>
+                    <td>@string.Format("{0:0.0}", rental.Rate) <i class="fa fa-star" aria-hidden="true"></i></td>
                     <td><img src="../CarImages/@rental.Car.ImageName" class="img-fluid table-image" /></td>
                     <td>
                         <div style="display:flex; flex-direction:column; justify-content:center; align-items:center;">

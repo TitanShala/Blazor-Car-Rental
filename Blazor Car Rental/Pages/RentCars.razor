@@ -19,9 +19,9 @@ else
                 <!--Sorting Container-->
                 <div class="col-2 mt-5">
                     <p>Sort by:</p>
-                    <div>                        
-                        <button @onclick="() => SortPrice()" class="bg-success"><i class="fa fa-sort" aria-hidden="true"></i>Price</button>
-                        <button @onclick="() => SortYear()" class="bg-success"><i class="fa fa-sort" aria-hidden="true"></i>Year</button>
+                    <div class="sorting-container">                        
+                        <button @onclick="() => SortPrice()"><i class="fa fa-sort" aria-hidden="true"></i>Price</button>
+                        <button @onclick="() => SortYear()"><i class="fa fa-sort" aria-hidden="true"></i>Year</button>
                     </div>
                 </div>
                 <!--Filtering Container-->
@@ -32,33 +32,35 @@ else
                                 <div class="col-12">
                                     <div class="row d-flex justify-content-center">
                                         <input class="col-9 search mr-2" type="text" placeholder="Search by make and model" @bind="Search" />
-                                        <input class="btn btn-danger" type="button" @onclick="SearchCars" value="Search" />
+                                        <input class="btn btn-danger text-right" type="button" @onclick="SearchCars" value="Search" />
+                                        <input style="font-size:12px;" class="btn btn-danger ml-2" type="button" @onclick="RemoveFilters" value="RemoveFilters" />
                                     </div>
                                 </div>
-                                <div class="col-12 mt-3">
-                                    <input class="btn btn-danger" type="button" @onclick="RemoveFilters" value="RemoveFilters" />
+                                <div class="col-12 mt-3 text-right add-filtering">
+                                    <button style="border:none; background-color:none;" @onclick="() => enableFiltering()"><i class="fa fa-filter" aria-hidden="true"></i></button>
                                 </div>
                             </div>
-                            <!--Date Filter-->
-                            <input value="Filter" type="button" class="btn btn-info mb-5" @onclick="() => enableFiltering()" />
-                            <div style="display:@filtering">
+                            <!--Date Filter-->          
+                            <div style="display:@filtering; background-color:darkred; color:black; font-weight:bold; border-radius:10px;" class="pr-5 pl-5 pt-5 pb-5 mb-5">
                                 <div class="row">
-                                    <p class="col-12 text-center">Choose receipt date and return date!</p>
-                                    <div class="form-group col-6">
+                                    <div class="form-group col-5">
                                         <label class="control-label">Receipt Date</label>
                                         <input disabled="@isDisabled" type="date" class="form-control" @bind="receiptDate" />
                                     </div>
-                                    <div class="form-group col-6">
+                                    <div class="form-group col-5">
                                         <label class="control-label">Return Date</label>
                                         <input disabled="@isDisabled" type="date" class="form-control" @bind="returnDate" />
                                     </div>
-                                    <input class="text-right" type="checkbox"  checked=@(isDisabled.Equals("true"))  @bind-value="isDisabled" />Disable/Enable Filtering by Date
+                                    <div class="col-12 d-flex flex-row justify-content-start align-items-center">
+                                        Disable:<i class="fa fa-calendar-o" aria-hidden="true"></i><input class="ml-2" type="checkbox" checked=@(isDisabled.Equals("true")) @bind-value="isDisabled" />
+                                    </div>
+                                    
                                     <p class="error text-danger">@error</p>
                                 </div>
                                 <div class="row mt-4 mb-4">
                                     <!--Transmission Filter-->
                                     <div class="transmission col-6">
-                                        <p>Transmission:</p>
+                                        <p>Transmission<i class="fa fa-cog" title="transmission" aria-hidden="true"></i></p>
                                         <lable>
                                             <input type="radio" name="transmission" checked=@(TransmissionFilter.Equals("Automatic")) @onclick='() =>TransmissionFilter="Automatic"' />Automatic
                                         </lable>
@@ -111,7 +113,7 @@ else
                                     <i class="" title="power"></i>@car.Power HP
                                 </p>
                                 <p>Rented: @car.rentalcount times!</p>
-                                <p>Rated: @string.Format("{0:0.0}", getReview(car.Id))  stars</p>
+                                <p>Rated: @string.Format("{0:0.0}", getReview(car.Id))  <i class="fa fa-star" aria-hidden="true"></i></p>
                                 <input type="button" class="btn btn-success btn-1" value="Rent" @onclick="() => RentCar(car.Id)" />
                             </div>
                         </div>

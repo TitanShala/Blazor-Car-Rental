@@ -3,6 +3,13 @@
     padding:0;
     box-sizing: border-box;
 }
+input:focus{
+    outline:none;
+}
+input{
+    border:none;
+    outline:none;
+}
 body{
     background-color: black;
     color:black;
@@ -19,12 +26,22 @@ body{
     min-width:100%;
     margin:0 ;
     display:flex;
-
+    flex-direction:column;
     justify-content:center;
     align-items:center;
 }
 .home-text{
     font-size:3rem;
+}
+.getIntouch {
+    padding: 5px 10px;
+    background-color: #0a2e36;
+    color: white;
+    border-radius: 7px;
+    font-size:24px;
+}
+.getIntouch:hover {
+    background-color: #2A2D34;
 }
 .top-cars-section {
     width: 100%;
