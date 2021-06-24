@@ -137,12 +137,32 @@ namespace Blazor_Car_Rental.Data.Services
                 }
                 else
                 {
-                    rentals = rentals.OrderBy(r => r.ReceiptDate).ToList();
+                    rentals = rentals.Where(r => r.Returned == false).OrderBy(r => r.ReceiptDate).ToList();
                     foreach (var rent in rentals)
                     {
-                        if ( !(rent.ReceiptDate >= RecDate && rent.ReturnDate <= RetDate) )
+                        //Check if the date is not the same
+                        if (rent.ReceiptDate != RecDate && rent.ReturnDate != RetDate)
                         {
-                            cars.Add(rent.Car);
+                            //If the requested receiptDate is between the rent date Or the requested return date is between the return date!
+                            if ( (RecDate < rent.ReceiptDate && RetDate > rent.ReturnDate) || (RecDate >= rent.ReceiptDate && RecDate <= rent.ReturnDate) || (RetDate >= rent.ReceiptDate && RetDate <= rent.ReturnDate))
+                            {
+                                //Check if the car exists in the available car list, if it does, remove it
+                                if (cars.Contains(rent.Car))
+                                {
+                                    cars.Remove(rent.Car);
+                                }
+
+                            }
+                            //If the requested receiptDate is not between the rent date Or the requested return date is not between the return date!
+                            else
+                            {
+                                //If available cars does not contain the car, add the car to the list
+                                if (!cars.Contains(rent.Car))
+                                {
+                                    cars.Add(rent.Car);
+                                }
+                            }
+                            
                         }
                     }
                 }

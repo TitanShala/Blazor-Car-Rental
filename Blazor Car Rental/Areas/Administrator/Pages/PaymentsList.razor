@@ -55,6 +55,7 @@ else
             nav.NavigateTo("/");
         }
         Payments = paymentService.GetPayments();
+        Payments.Reverse();
     }
 
 }

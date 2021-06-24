@@ -43,13 +43,20 @@ namespace Blazor_Car_Rental.Controllers
             
             int CarId;
             Car car = new Car();
+            double days = 0 ;
             foreach(var item in items)
             {
                 Rental rental = rentalService.getRental(item.Id).Result;
+                days = (rental.ReturnDate - rental.ReceiptDate).TotalDays;
                 CarId = rental.CarId;
                 car = admCarService.GetCar(CarId).Result;
             }
+            if(days == 0)
+            {
+                days += 1;
+            }
             int price = Convert.ToInt32(car.Price) * 100;
+            price = (int)(price * days);
             price = (int)(price - (price * 0.1)); //10% DISCOUNT
             return price;
         }

@@ -68,6 +68,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         cars = CarService.GetCars();
+        cars.Reverse();
     }
 
     void AddNewCar()

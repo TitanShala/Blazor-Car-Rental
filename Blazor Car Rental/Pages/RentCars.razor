@@ -27,7 +27,7 @@ else
                 <!--Filtering Container-->
                 <div class="col-md-10">
                     <div class="form-row">
-                        <form class="col-12">
+                        <form class="col-12" @onsubmit="SearchCars">
                             <div class="row mb-5">
                                 <div class="col-12">
                                     <div class="row d-flex justify-content-center">
@@ -52,7 +52,7 @@ else
                                         <label class="control-label">Return Date</label>
                                         <input disabled="@isDisabled" type="date" class="form-control" @bind="returnDate" />
                                     </div>
-                                    <input class="text-right" type="checkbox" @bind-value="isDisabled" />Disable/Enable Data Filtering
+                                    <input class="text-right" type="checkbox"  checked=@(isDisabled.Equals("true"))  @bind-value="isDisabled" />Disable/Enable Filtering by Date
                                     <p class="error text-danger">@error</p>
                                 </div>
                                 <div class="row mt-4 mb-4">
@@ -131,14 +131,16 @@ else
     DateTime returnDate;
     DateTime? today = DateTime.Today;
     string error = "";
-    bool isDisabled = false;
+    bool isDisabled = true;
     string filtering = "none";
 
     private List<Car> AllCars;
     private List<Car> cars;
     protected override async Task OnInitializedAsync()
     {
+        isDisabled = true;
         cars = CarService.GetCars();
+        cars.Reverse();
         AllCars = cars;
         returnDate = (DateTime)today;
         receiptDate = (DateTime)today;
@@ -221,11 +223,13 @@ else
 
         if (!String.IsNullOrEmpty(Search))
         {
-            Search = Search.ToLower();
+            var s = Search.ToLower();
+            s = RemoveSpaces(s);
+
             if (counter > 0)
-                cars = cars.Where(c => c.Make.ToLower().Contains(Search) || c.Model.ToLower().Contains(Search)).ToList();
+                cars = cars.Where(c=> c.Make.ToLower().Concat(c.Model.ToLower()).ToString().Contains(s)).ToList();
             else
-                cars = AllCars.Where(c => c.Make.ToLower().Contains(Search) || c.Model.ToLower().Contains(Search)).ToList();
+                cars = AllCars.Where(c => (c.Make.ToLower()+c.Model.ToLower()).Contains(s)).ToList();
 
             counter++;
         }
@@ -245,6 +249,7 @@ else
     async Task RemoveFilters()
     {
         cars = CarService.GetCars();
+        cars.Reverse();
         AllCars = cars;
         TransmissionFilter = "none";
         FuelFilter = "none";
@@ -263,5 +268,18 @@ else
             filtering = "block";
         else
             filtering = "none";
+    }
+
+    string RemoveSpaces(string search)
+    {
+        string output = "";
+        foreach(char c in search)
+        {
+            if( c != ' ')
+            {
+                output += c;
+            }
+        }
+        return output;
     }
 }

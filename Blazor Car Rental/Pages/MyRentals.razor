@@ -91,6 +91,7 @@ else
             nav.NavigateTo("Identity/Account/Login");
         }
         RentalList = await RentalService.GetMyRentals(authState.User.Identity.Name);
+        RentalList.Reverse();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

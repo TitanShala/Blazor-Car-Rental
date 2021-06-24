@@ -39,8 +39,8 @@ else
             <tr>
                 <td>@rental.Car.Make @rental.Car.Model</td>
                 <td>@user.UserName</td>
-                <td>@rental.ReceiptDate</td>
-                <td>@rental.ReturnDate</td>
+                <td>@rental.ReceiptDate.Day/@rental.ReceiptDate.Month/@rental.ReceiptDate.Year</td>
+                <td>@rental.ReturnDate.Day/@rental.ReturnDate.Month/@rental.ReturnDate.Year</td>
                 <td>@rental.Returned</td>
                 <td>@rental.Paid</td>
                 <td><img src="../CarImages/@rental.Car.ImageName" class="img-fluid table-image" /></td>
@@ -77,6 +77,7 @@ else
             nav.NavigateTo("/");
         }
         RentalList = await RentalService.GetRentals();
+        RentalList.Reverse();
     }
 
     void SetToReturned(Rental rental)
