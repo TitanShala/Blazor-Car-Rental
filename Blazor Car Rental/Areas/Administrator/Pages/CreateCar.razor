@@ -94,6 +94,7 @@
     IFileListEntry file;
     string ErrorMessage;
     DateTime? today = DateTime.Today;
+    List<string> ImageExtensions = new List<string> { ".JPG", ".JPE", ".BMP", ".GIF", ".PNG" , "WEBP"};
 
     protected override async Task OnInitializedAsync()
     {
@@ -191,7 +192,12 @@
 
         if (file != null)
         {
-            string fileName = Path.GetFileNameWithoutExtension(file.Name) + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(file.Name); ;
+            if (!ImageExtensions.Contains(Path.GetExtension(file.Name).ToUpperInvariant()))
+            {
+                ErrorMessage = "Please choose an Image File!";
+                return;
+            }
+            string fileName = Path.GetFileNameWithoutExtension(file.Name) + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(file.Name);
             newCar.ImageName = fileName;
             await CarService.CreateCarAsync(newCar);
             await fileUpload.Upload(file, fileName);
@@ -200,6 +206,7 @@
         else
         {
             ErrorMessage = "Please choose a car image!";
+            return;
         }
 
 

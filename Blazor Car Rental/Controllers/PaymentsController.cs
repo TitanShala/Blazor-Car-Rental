@@ -49,7 +49,7 @@ namespace Blazor_Car_Rental.Controllers
                 Rental rental = rentalService.getRental(item.Id).Result;
                 days = (rental.ReturnDate - rental.ReceiptDate).TotalDays;
                 CarId = rental.CarId;
-                car = admCarService.GetCar(CarId).Result;
+                car = admCarService.GetCar(CarId);
             }
             if(days == 0)
             {

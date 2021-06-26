@@ -10,60 +10,81 @@
 @inject IFileUpload fileUpload;
 
 
-<form>
-    <div class="row">
-        <div class="col-md-8">
-            <div class="form-group">
+<h2 class="text-center mt-5 mb-5">Add New Car</h2>
+
+<form class="container bg-light">
+    <div class="row bg-light d-flex justify-content-center pt-5 pb-5 ">
+            <div class="form-group col-md-5">
                 <label for="Make" class="control-label">Make</label>
                 <input form="Make" class="form-control" @bind="car.Make" />
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-5">
                 <label for="Model" class="control-label">Model</label>
                 <input form="Model" class="form-control" @bind="car.Model" />
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-5">
                 <label for="Year" class="control-label">Year</label>
-                <input form="Year" class="form-control" @bind="car.Year" />
+                <input form="Year" type="number" class="form-control" @bind="car.Year" />
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-5">
                 <label for="Doors" class="control-label">Doors</label>
-                <input form="Doors" class="form-control" @bind="car.Doors" />
+                <input form="Doors" type="number" class="form-control" @bind="car.Doors" />
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-5">
                 <label for="Luggages" class="control-label">Luggages</label>
-                <input form="Luggages" class="form-control" @bind="car.Luggages" />
+                <input form="Luggages" type="number" class="form-control" @bind="car.Luggages" />
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-5">
                 <label for="Power" class="control-label">Power</label>
-                <input form="Power" class="form-control" @bind="car.Power" />
+                <input form="Power" type="number" class="form-control" @bind="car.Power" />
             </div>
-            <div class="form-group">
-                <label for="Transmission" class="control-label">Transmission</label>
-                <input form="Transmission" class="form-control" @bind="car.Transmission" />
+            <div class="form-group col-md-5">
+                <p>Transmission:</p>
+                <lable>
+                    <input type="radio" name="transmission" checked=@(car.Transmission.Equals("Automatic")) @onclick='() =>car.Transmission="Automatic"' />Automatic
+                </lable>
+                <lable>
+                    <input type="radio" name="transmission" checked=@(car.Transmission.Equals("Manual")) @onclick='() =>car.Transmission="Manual"' />Manual
+                </lable>
             </div>
-            <div class="form-group">
-                <label for="Fuel" class="control-label">Fuel</label>
-                <input form="Fuel" class="form-control" @bind="car.Fuel" />
+            <div class="form-group col-md-5">
+                <p>Fuel:</p>
+                <lable>
+                    <input type="radio" name="group" checked=@(car.Fuel.Equals("Diesel")) @onclick='() =>car.Fuel="Diesel"' />Diesel
+                </lable>
+                <lable>
+                    <input type="radio" name="group" checked=@(car.Fuel.Equals("Gasoline")) @onclick='() =>car.Fuel="Gasoline"' />Gasoline
+                </lable>
+                <lable>
+                    <input type="radio" name="group" checked=@(car.Fuel.Equals("Hybrid")) @onclick='() =>car.Fuel="Hybrid"' />Hybrid
+                </lable>
+                <lable>
+                    <input type="radio" name="group" checked=@(car.Fuel.Equals("Electricity")) @onclick='() =>car.Fuel="Electricity"' />Electricity
+                </lable>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-5">
                 <label for="EngineDisplacement" class="control-label">EngineDisplacement</label>
-                <input form="EngineDisplacement" class="form-control" @bind="car.EngineDisplacement" />
+                <input form="EngineDisplacement" type="number" class="form-control" @bind="car.EngineDisplacement" />
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-5">
                 <label for="Price" class="control-label">Price</label>
-                <input form="Price" class="form-control" @bind="car.Price" />
+                <input form="Price" type="number" class="form-control" @bind="car.Price" />
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-5">
                 <label for="ImageFile" class="control-label">Image</label>
-                <InputFile OnChange="@HandleFileSelected"></InputFile>
+                <InputFile  OnChange="@HandleFileSelected"></InputFile>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <input type="button" class="btn btn-primary" @onclick="Update" value="Update" />
-                <input type="button" class="btn btn-danger" @onclick="Cancel" value="Cancel" />
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <input type="button" class="btn btn-primary" @onclick="@Update" value="Update" />
+                    <input type="button" class="btn btn-danger" @onclick="@Cancel" value="Cancel" />
+                </div>
             </div>
-        </div>
+            <div class="col-12">
+                <p id="error" class="text-danger text-left">@ErrorMessage</p>
+            </div>
+            
     </div>
 </form>
 
@@ -75,10 +96,12 @@
 
     Car car = new Car();
     IFileListEntry file;
-
+    string ErrorMessage;
+    DateTime? today = DateTime.Today;
 
     protected override async Task OnInitializedAsync()
     {
+        car = CarService.GetCar(Int32.Parse(Id));
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         if (!authState.User.Identity.IsAuthenticated)
         {
@@ -97,6 +120,76 @@
 
     protected async void Update()
     {
+
+        if (String.IsNullOrEmpty(car.Make) || car.Make.Length < 3 || car.Make.Length > 10)
+        {
+            ErrorMessage = "Car make length should be between 3 to 10!";
+            return;
+        }
+        else
+        {
+            car.Make = car.Make.ToLower();
+        }
+
+        if (String.IsNullOrEmpty(car.Model) || car.Model.Length < 1 || car.Model.Length > 10)
+        {
+            ErrorMessage = "Car Model length should be between 1 to 10!";
+            return;
+        }
+        else
+        {
+            car.Model = car.Model.ToLower();
+        }
+
+        int thisyear = today.Value.Year;
+
+        if (car.Year == null || thisyear < car.Year || car.Year < 1900)
+        {
+            ErrorMessage = "Year is not valid!";
+            return;
+        }
+
+        if (car.Doors == null || car.Doors < 2 || car.Doors > 8)
+        {
+            ErrorMessage = "Doors should be between 2 and 8!";
+            return;
+        }
+
+        if (car.Luggages == null || car.Luggages < 0 || car.Luggages > 20)
+        {
+            ErrorMessage = "Luggages should be between 0 and 20";
+            return;
+        }
+
+        if (car.Power == null || car.Power < 50 || car.Power > 3000)
+        {
+            ErrorMessage = "Power should be between 50 and 3000";
+            return;
+        }
+
+        if (String.IsNullOrEmpty(car.Transmission))
+        {
+            ErrorMessage = "Please choose transmission!";
+            return;
+        }
+
+        if (String.IsNullOrEmpty(car.Fuel))
+        {
+            ErrorMessage = "Please choose fuel!";
+            return;
+        }
+
+        if (car.EngineDisplacement == null || car.EngineDisplacement < 0.5 || car.EngineDisplacement > 12)
+        {
+            ErrorMessage = "Engine displacement should be between 0.5 and 12!";
+            return;
+        }
+
+        if (car.Price == null || car.Price < 10 || car.Price > 5000)
+        {
+            ErrorMessage = "Price should be between 0 and 5000!";
+            return;
+        }
 
         if (file != null)
         {

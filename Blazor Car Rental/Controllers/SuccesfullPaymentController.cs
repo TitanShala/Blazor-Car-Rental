@@ -38,6 +38,10 @@ namespace Blazor_Car_Rental.Controllers
             payment.RentalId = Int32.Parse(item.Id);
             Rental rental = rentalService.getRental(item.Id).Result;
             double days = (rental.ReturnDate - rental.ReceiptDate).TotalDays;
+            if (days == 0)
+            {
+                days += 1;
+            }
             payment.Price = (rental.Car.Price - (rental.Car.Price * 0.1)) * days;
             DateTime date = DateTime.Today;
             payment.Date = date;

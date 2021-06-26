@@ -58,9 +58,9 @@ namespace Blazor_Car_Rental.Areas.Administrator.Services
             return TopCars;
         }
 
-        public async Task<Car> GetCar(int id)
+        public Car GetCar(int id)
         {
-            Car car = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id);
+            Car car = _context.Cars.FirstOrDefault(c => c.Id == id);
             return car;
         }
 
