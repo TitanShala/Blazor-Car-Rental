@@ -1,4 +1,9 @@
 ﻿@page "/Checkout/{id}"
+@namespace Blazor_Car_Rental.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -16,14 +21,13 @@
     <base href="~/" />
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
     <link rel="stylesheet" href="css/global.css" />
-
-    <script src="https://js.stripe.com/v3/"></script>
-    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
-
-
+    <link href="css/site.css" rel="stylesheet" />
 </head>
 
 <body>
+    <app>
+        <component type="typeof(App)" render-mode="Server" />
+    </app>
     <!-- Display a payment form -->
     <form id="payment-form">
         <div id="card-element"><!--Stripe.js injects the Card Element--></div>
@@ -115,7 +119,7 @@
                 } else {
                     // The payment succeeded!
                     orderComplete(result.paymentIntent.id);
-                    
+
                 }
             });
     };
@@ -137,7 +141,7 @@
                 "/MyRentals",
                 "target",
                 "_blank"
-        );
+            );
         document.querySelector(".result-message").classList.remove("hidden");
         document.querySelector("button").disabled = true;
     };

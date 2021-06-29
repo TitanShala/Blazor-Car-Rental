@@ -19,6 +19,8 @@ using System.Threading.Tasks;
 using Blazor_Car_Rental.Data.Services;
 using Blazor_Car_Rental.Areas.Identity.Models;
 using Blazored.SessionStorage;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Blazor_Car_Rental.Data.Models;
 
 namespace Blazor_Car_Rental
 {
@@ -50,6 +52,12 @@ namespace Blazor_Car_Rental
             services.AddScoped<PaymentService>();
             services.AddScoped<UserService>();
             services.AddBlazoredSessionStorage();
+
+            // requires
+            // using Microsoft.AspNetCore.Identity.UI.Services;
+            // using WebPWrecover.Services;
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
