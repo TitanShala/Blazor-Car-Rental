@@ -11,60 +11,77 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 
     <div class="container">
-        <h3>UserList</h3>
-
+        <h3 class="text-white text-center mb-5 mt-3" >UserList</h3>
+ 
         <div class="row d-flex justify-content-around">
-            <table class="col-5 table table-striped table-dark cars-table ml-2">
-                <thead>
-                    <tr>
-                        <th>UserName</th>
-                        <th>Role</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var user in users)
-                    {
-                        if (users.Count < 1)
+            @if (users.Count < 1)
+            {
+                <p class="text-white">No users at list!</p>
+            }
+            else
+            {
+                <h4 class="text-white">Users</h4>
+                <table class="col-5 table table-striped table-dark cars-table ml-2">
+                    <thead>
+                        <tr>
+                            <th>UserName</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in users)
                         {
+                            if (users.Count < 1)
+                            {
+                                <tr>
+                                    <td>No Users</td>
+                                </tr>
+                            }
                             <tr>
-                                <td>No Users</td>
+                                <td>@user.UserName</td>
+                                <td>User</td>
+                                <td>
+                                    <div style="display:flex; flex-direction:row; justify-content:center; align-items:center;">
+                                        <input type="button" class="btn btn-danger" value="Add to admin" @onclick="() => AddToAdmin(user.Id)" />
+                                    </div>
+                                </td>
                             </tr>
                         }
-                        <tr>
-                            <td>@user.UserName</td>
-                            <td>User</td>
-                            <td>
-                                <div style="display:flex; flex-direction:row; justify-content:center; align-items:center;">
-                                    <input type="button" class="btn btn-danger" value="Add to admin" @onclick="() => AddToAdmin(user.Id)" />
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            }
+            @if (admins.Count < 1)
+            {
+                <p>Loading...!</p>
+            }
+            else
+            {
 
-            <table class="col-5 table table-striped table-dark cars-table mr-2">
-                <thead>
-                    <tr>
-                        <th>UserName</th>
-                        <th>Role</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var admin in admins)
-                    {
+                
+                <table class="col-5 table table-striped table-dark cars-table mr-2">
+                    <thead>
+                        <tr>Admins</tr>
                         <tr>
-                            <td>@admin.UserName</td>
-                            <td>Admin</td>
+                            <th>UserName</th>
+                            <th>Role</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var admin in admins)
+                        {
+                            <tr>
+                                <td>@admin.UserName</td>
+                                <td>Admin</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
         </div>
     </div>
     @code {
-        List<IdentityUser> users;
-        List<IdentityUser> admins;
+        List<IdentityUser> users = new List<IdentityUser>();
+        List<IdentityUser> admins = new List<IdentityUser>();
 
         protected override async Task OnInitializedAsync()
         {
@@ -77,12 +94,15 @@
             {
                 nav.NavigateTo("/");
             }
+
             users = UserServices.getUsers();
             admins = UserServices.getAdmins();
         }
 
         void AddToAdmin(string id)
         {
-
+            UserServices.AddToAdmin(id);
+            users = UserServices.getUsers();
+            admins = UserServices.getAdmins();
         }
     }

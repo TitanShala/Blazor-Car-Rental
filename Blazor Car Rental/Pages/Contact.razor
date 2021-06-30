@@ -11,26 +11,27 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group col-md-4">
-                            <label for="Name" class="control-label">Name</label>
-                            <input form="Name" class="form-control" @bind="newMessage.Name" />
+                            <label for="Name" class="control-label">Full Name</label>
+                            <input required form="Name" class="form-control" @bind="newMessage.Name" />
                         </div>
                         <div class="form-group col-md-4">
                             <label for="Email" class="control-label">Email</label>
-                            <input form="Email" class="form-control" @bind="newMessage.Email" />
+                            <input required type="email" form="Email" class="form-control" @bind="newMessage.Email" />
                         </div>
                         <div class="form-group col-md-4">
                             <label for="Subject" class="control-label">Subject</label>
-                            <input form="Subject" class="form-control" @bind="newMessage.Subject" />
+                            <input required form="Subject" class="form-control" @bind="newMessage.Subject" />
                         </div>
                         <div class="form-group col-md-8">
                             <label for="Text" class="control-label">Text</label>
-                            <textarea rows="6" form="Text" class="form-control" @bind="newMessage.Text"></textarea>
+                            <textarea required rows="6" form="Text" class="form-control" @bind="newMessage.Text"></textarea>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
                             <input type="button" class="btn btn-success" @onclick="@CreateNewMessage" value="Send Message" />
                         </div>
+                        <p class="text-danger">@error</p>
                     </div>
                 </div>
             </form>
@@ -40,10 +41,31 @@
         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d23504.264816104413!2d21.016011523491205!3d42.57581987594197!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x13537ccdea831979%3A0x7bd7c5dfd98fabc!2sAeroporti%20Nd%C3%ABrkomb%C3%ABtar%20i%20Prishtin%C3%ABs%20%22Adem%20Jashari%22!5e0!3m2!1sen!2s!4v1623182825329!5m2!1sen!2s" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
     </section>
     @code {
+        string error = "";
         Message newMessage = new Message();
 
         public void CreateNewMessage()
         {
+            if(String.IsNullOrEmpty(newMessage.Name) || newMessage.Name.Length < 5 || newMessage.Name.Length > 30)
+            {
+                error = "Name length should be between 5 and 30!";
+                return;
+            }
+            else if (String.IsNullOrEmpty(newMessage.Email) || !newMessage.Email.Contains("@"))
+            {
+                error = "Check your email";
+                return;
+            }
+            else if(String.IsNullOrEmpty(newMessage.Subject) || newMessage.Subject.Length < 5 || newMessage.Subject.Length > 30)
+            {
+                error = "Subject length should be between 5 and 30!";
+                return;
+            }
+            else if(String.IsNullOrEmpty(newMessage.Text) || newMessage.Text.Length < 5 || newMessage.Text.Length > 150)
+            {
+                error = "Text length should be between 5 and 150!";
+                return;
+            }
             MessageServices.AddMessage(newMessage);
             nav.NavigateTo("/");
 

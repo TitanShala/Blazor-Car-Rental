@@ -26,10 +26,10 @@ namespace Blazor_Car_Rental.Data.Models
 
         public Task Execute(string apiKey, string subject, string message, string email)
         {
-            var client = new SendGridClient(apiKey);
+            var client = new SendGridClient("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");
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress("ts44423@ubt-uni.net", Options.SendGridUser),
+                From = new EmailAddress("ts44423@ubt-uni.net", "BlazorApp"),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message
