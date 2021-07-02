@@ -10,6 +10,8 @@
 @inject IFileUpload fileUpload;
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+@inject IJSRuntime JSRuntime
+
 
 <h1 class="text-center text-white bg-dark">My Rentals List</h1>
 
@@ -45,7 +47,7 @@ else
                         <div style="display:flex; flex-direction:column; justify-content:center; align-items:center;">
                             @if (rental.Returned == false)
                             {
-                            <p>Not returned yet</p>
+                                <p>Not returned yet</p>
                             }
                             else if (rental.Rate == 0 || rental.Rate == null)
                             {
@@ -67,7 +69,7 @@ else
                     </td>
                     @if (rental.Paid == false)
                     {
-                    <td><a class="btn btn-success" href="/Checkout/@rental.Id">Checkout</a></td>
+                        <td><a class="btn btn-success" href="/Checkout/@rental.Id">Checkout</a></td>
                     }
                     else
                     {
@@ -88,7 +90,8 @@ else
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         if (!authState.User.Identity.IsAuthenticated)
         {
-            nav.NavigateTo("Identity/Account/Login");
+            JSRuntime.InvokeVoidAsync("goToLogin");
+            return;
         }
         RentalList = await RentalService.GetMyRentals(authState.User.Identity.Name);
         RentalList.Reverse();

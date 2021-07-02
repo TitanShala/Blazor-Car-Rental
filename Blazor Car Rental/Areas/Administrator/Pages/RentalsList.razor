@@ -8,7 +8,8 @@
 @inject RentalServices RentalService
 @inject NavigationManager nav;
 @inject IFileUpload fileUpload;
-@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IJSRuntime JSRuntime;
 
 <h1 class="text-center text-white bg-dark">Rentals List</h1>
 
@@ -36,27 +37,27 @@ else
             @foreach (var rental in RentalList)
             {
                 IdentityUser user = RentalService.getRentalUser(rental.UserId);
-            <tr>
-                <td>@rental.Car.Make @rental.Car.Model</td>
-                <td>@user.UserName</td>
-                <td>@rental.ReceiptDate.Day/@rental.ReceiptDate.Month/@rental.ReceiptDate.Year</td>
-                <td>@rental.ReturnDate.Day/@rental.ReturnDate.Month/@rental.ReturnDate.Year</td>
-                <td>@rental.Returned</td>
-                <td>@rental.Paid</td>
-                <td><img src="../CarImages/@rental.Car.ImageName" class="img-fluid table-image" /></td>
-                <td>
-                    <div style="display:flex; flex-direction:row; justify-content:center; align-items:center;">
-                        @if (rental.Returned == false)
-                        {
-                            <input type="button" class="btn btn-info" value="Finish" @onclick="() => SetToReturned(rental)" />
-                        }
-                        else
-                        {
-                            <input disabled type="button" class="btn btn-info" value="Finish" @onclick="() => SetToReturned(rental)" />
-                        }
-                    </div>
-                </td>
-            </tr>
+                <tr>
+                    <td>@rental.Car.Make @rental.Car.Model</td>
+                    <td>@user.UserName</td>
+                    <td>@rental.ReceiptDate.Day/@rental.ReceiptDate.Month/@rental.ReceiptDate.Year</td>
+                    <td>@rental.ReturnDate.Day/@rental.ReturnDate.Month/@rental.ReturnDate.Year</td>
+                    <td>@rental.Returned</td>
+                    <td>@rental.Paid</td>
+                    <td><img src="../CarImages/@rental.Car.ImageName" class="img-fluid table-image" /></td>
+                    <td>
+                        <div style="display:flex; flex-direction:row; justify-content:center; align-items:center;">
+                            @if (rental.Returned == false)
+                            {
+                                <input type="button" class="btn btn-info" value="Finish" @onclick="() => SetToReturned(rental)" />
+                            }
+                            else
+                            {
+                                <input disabled type="button" class="btn btn-info" value="Finish" @onclick="() => SetToReturned(rental)" />
+                            }
+                        </div>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
@@ -70,20 +71,26 @@ else
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         if (!authState.User.Identity.IsAuthenticated)
         {
-            nav.NavigateTo("Identity/Account/Login");
+            JSRuntime.InvokeVoidAsync("goToLogin");
+            return;
         }
         else if (!authState.User.IsInRole("Admin"))
         {
             nav.NavigateTo("/");
+            return;
         }
         RentalList = await RentalService.GetRentals();
         RentalList.Reverse();
     }
 
-    void SetToReturned(Rental rental)
+    async Task SetToReturned(Rental rental)
     {
-        RentalService.SetToReturned(rental);
-        nav.NavigateTo("/RentalsList");
+        var confirmation = await JSRuntime.InvokeAsync<bool>("confirm");
+        if (confirmation)
+        {
+            RentalService.SetToReturned(rental);
+            nav.NavigateTo("/RentalsList");
+        }
     }
     /*
     void AddNewCar()

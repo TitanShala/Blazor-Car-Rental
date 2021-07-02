@@ -60,7 +60,7 @@ namespace Blazor_Car_Rental.Areas.Administrator.Services
 
         public Car GetCar(int id)
         {
-            Car car = _context.Cars.FirstOrDefault(c => c.Id == id);
+            Car car = _context.Cars.Where(c => c.Id == id).FirstOrDefault();
             return car;
         }
 

@@ -9,100 +9,108 @@
 @inject NavigationManager nav;
 @using Microsoft.AspNetCore.Identity;
 @inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IJSRuntime JSRuntime;
 
-    <div class="container">
-        <h3 class="text-white text-center mb-5 mt-3" >UserList</h3>
- 
-        <div class="row d-flex justify-content-around">
-            @if (users.Count < 1)
-            {
-                <p class="text-white">No users at list!</p>
-            }
-            else
-            {
-                <h4 class="text-white">Users</h4>
-                <table class="col-5 table table-striped table-dark cars-table ml-2">
-                    <thead>
-                        <tr>
-                            <th>UserName</th>
-                            <th>Role</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var user in users)
-                        {
-                            if (users.Count < 1)
-                            {
-                                <tr>
-                                    <td>No Users</td>
-                                </tr>
-                            }
-                            <tr>
-                                <td>@user.UserName</td>
-                                <td>User</td>
-                                <td>
-                                    <div style="display:flex; flex-direction:row; justify-content:center; align-items:center;">
-                                        <input type="button" class="btn btn-danger" value="Add to admin" @onclick="() => AddToAdmin(user.Id)" />
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-            @if (admins.Count < 1)
-            {
-                <p>Loading...!</p>
-            }
-            else
-            {
+<div class="container">
+    <h3 class="text-white text-center mb-5 mt-3">UserList</h3>
 
-                
-                <table class="col-5 table table-striped table-dark cars-table mr-2">
-                    <thead>
-                        <tr>Admins</tr>
-                        <tr>
-                            <th>UserName</th>
-                            <th>Role</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var admin in admins)
-                        {
-                            <tr>
-                                <td>@admin.UserName</td>
-                                <td>Admin</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-        </div>
-    </div>
-    @code {
-        List<IdentityUser> users = new List<IdentityUser>();
-        List<IdentityUser> admins = new List<IdentityUser>();
-
-        protected override async Task OnInitializedAsync()
+    <div class="row d-flex justify-content-around">
+        @if (users.Count < 1)
         {
-            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            if (!authState.User.Identity.IsAuthenticated)
-            {
-                nav.NavigateTo("Identity/Account/Login");
-            }
-            else if (!authState.User.IsInRole("Admin"))
-            {
-                nav.NavigateTo("/");
-            }
+            <p class="text-white">No users at list!</p>
+        }
+        else
+        {
+            <h4 class="text-white">Users</h4>
+            <table class="col-5 table table-striped table-dark cars-table ml-2">
+                <thead>
+                    <tr>
+                        <th>UserName</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in users)
+                    {
+                        if (users.Count < 1)
+                        {
+                            <tr>
+                                <td>No Users</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td>@user.UserName</td>
+                            <td>User</td>
+                            <td>
+                                <div style="display:flex; flex-direction:row; justify-content:center; align-items:center;">
+                                    <input type="button" class="btn btn-danger" value="Add to admin" @onclick="() => AddToAdmin(user.Id)" />
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        @if (admins.Count < 1)
+        {
+            <p>Loading...!</p>
+        }
+        else
+        {
 
-            users = UserServices.getUsers();
-            admins = UserServices.getAdmins();
+
+            <table class="col-5 table table-striped table-dark cars-table mr-2">
+                <thead>
+                    <tr>Admins</tr>
+                    <tr>
+                        <th>UserName</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var admin in admins)
+                    {
+                        <tr>
+                            <td>@admin.UserName</td>
+                            <td>Admin</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+@code {
+    List<IdentityUser> users = new List<IdentityUser>();
+    List<IdentityUser> admins = new List<IdentityUser>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (!authState.User.Identity.IsAuthenticated)
+        {
+            JSRuntime.InvokeVoidAsync("goToLogin");
+            return;
+        }
+        else if (!authState.User.IsInRole("Admin"))
+        {
+            nav.NavigateTo("/");
+            return;
         }
 
-        void AddToAdmin(string id)
+        users = UserServices.getUsers();
+        admins = UserServices.getAdmins();
+    }
+
+    async Task AddToAdmin(string id)
+    {
+        var confirmation = await JSRuntime.InvokeAsync<bool>("confirm");
+        if (confirmation)
         {
             UserServices.AddToAdmin(id);
             users = UserServices.getUsers();
             admins = UserServices.getAdmins();
         }
+
     }
+}

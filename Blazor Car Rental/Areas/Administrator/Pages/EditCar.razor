@@ -8,83 +8,85 @@
 @inject AdmCarServices CarService;
 @inject NavigationManager nav;
 @inject IFileUpload fileUpload;
+@inject IJSRuntime JSRuntime;
+
 
 
 <h2 class="text-center mt-5 mb-5">Add New Car</h2>
 
 <form class="container bg-light">
     <div class="row bg-light d-flex justify-content-center pt-5 pb-5 ">
-            <div class="form-group col-md-5">
-                <label for="Make" class="control-label">Make</label>
-                <input form="Make" class="form-control" @bind="car.Make" />
-            </div>
-            <div class="form-group col-md-5">
-                <label for="Model" class="control-label">Model</label>
-                <input form="Model" class="form-control" @bind="car.Model" />
-            </div>
-            <div class="form-group col-md-5">
-                <label for="Year" class="control-label">Year</label>
-                <input form="Year" type="number" class="form-control" @bind="car.Year" />
-            </div>
-            <div class="form-group col-md-5">
-                <label for="Doors" class="control-label">Doors</label>
-                <input form="Doors" type="number" class="form-control" @bind="car.Doors" />
-            </div>
-            <div class="form-group col-md-5">
-                <label for="Luggages" class="control-label">Luggages</label>
-                <input form="Luggages" type="number" class="form-control" @bind="car.Luggages" />
-            </div>
-            <div class="form-group col-md-5">
-                <label for="Power" class="control-label">Power</label>
-                <input form="Power" type="number" class="form-control" @bind="car.Power" />
-            </div>
-            <div class="form-group col-md-5">
-                <p>Transmission:</p>
-                <lable>
-                    <input type="radio" name="transmission" checked=@(car.Transmission.Equals("Automatic")) @onclick='() =>car.Transmission="Automatic"' />Automatic
-                </lable>
-                <lable>
-                    <input type="radio" name="transmission" checked=@(car.Transmission.Equals("Manual")) @onclick='() =>car.Transmission="Manual"' />Manual
-                </lable>
-            </div>
-            <div class="form-group col-md-5">
-                <p>Fuel:</p>
-                <lable>
-                    <input type="radio" name="group" checked=@(car.Fuel.Equals("Diesel")) @onclick='() =>car.Fuel="Diesel"' />Diesel
-                </lable>
-                <lable>
-                    <input type="radio" name="group" checked=@(car.Fuel.Equals("Gasoline")) @onclick='() =>car.Fuel="Gasoline"' />Gasoline
-                </lable>
-                <lable>
-                    <input type="radio" name="group" checked=@(car.Fuel.Equals("Hybrid")) @onclick='() =>car.Fuel="Hybrid"' />Hybrid
-                </lable>
-                <lable>
-                    <input type="radio" name="group" checked=@(car.Fuel.Equals("Electricity")) @onclick='() =>car.Fuel="Electricity"' />Electricity
-                </lable>
-            </div>
-            <div class="form-group col-md-5">
-                <label for="EngineDisplacement" class="control-label">EngineDisplacement</label>
-                <input form="EngineDisplacement" type="number" class="form-control" @bind="car.EngineDisplacement" />
-            </div>
-            <div class="form-group col-md-5">
-                <label for="Price" class="control-label">Price</label>
-                <input form="Price" type="number" class="form-control" @bind="car.Price" />
-            </div>
-            <div class="form-group col-md-5">
-                <label for="ImageFile" class="control-label">Image</label>
-                <InputFile  OnChange="@HandleFileSelected"></InputFile>
-            </div>
+        <div class="form-group col-md-5">
+            <label for="Make" class="control-label">Make</label>
+            <input form="Make" class="form-control" @bind="car.Make" />
+        </div>
+        <div class="form-group col-md-5">
+            <label for="Model" class="control-label">Model</label>
+            <input form="Model" class="form-control" @bind="car.Model" />
+        </div>
+        <div class="form-group col-md-5">
+            <label for="Year" class="control-label">Year</label>
+            <input form="Year" type="number" class="form-control" @bind="car.Year" />
+        </div>
+        <div class="form-group col-md-5">
+            <label for="Doors" class="control-label">Doors</label>
+            <input form="Doors" type="number" class="form-control" @bind="car.Doors" />
+        </div>
+        <div class="form-group col-md-5">
+            <label for="Luggages" class="control-label">Luggages</label>
+            <input form="Luggages" type="number" class="form-control" @bind="car.Luggages" />
+        </div>
+        <div class="form-group col-md-5">
+            <label for="Power" class="control-label">Power</label>
+            <input form="Power" type="number" class="form-control" @bind="car.Power" />
+        </div>
+        <div class="form-group col-md-5">
+            <p>Transmission:</p>
+            <lable>
+                <input type="radio" name="transmission" checked=@(car.Transmission.Equals("Automatic")) @onclick='() =>car.Transmission="Automatic"' />Automatic
+            </lable>
+            <lable>
+                <input type="radio" name="transmission" checked=@(car.Transmission.Equals("Manual")) @onclick='() =>car.Transmission="Manual"' />Manual
+            </lable>
+        </div>
+        <div class="form-group col-md-5">
+            <p>Fuel:</p>
+            <lable>
+                <input type="radio" name="group" checked=@(car.Fuel.Equals("Diesel")) @onclick='() =>car.Fuel="Diesel"' />Diesel
+            </lable>
+            <lable>
+                <input type="radio" name="group" checked=@(car.Fuel.Equals("Gasoline")) @onclick='() =>car.Fuel="Gasoline"' />Gasoline
+            </lable>
+            <lable>
+                <input type="radio" name="group" checked=@(car.Fuel.Equals("Hybrid")) @onclick='() =>car.Fuel="Hybrid"' />Hybrid
+            </lable>
+            <lable>
+                <input type="radio" name="group" checked=@(car.Fuel.Equals("Electricity")) @onclick='() =>car.Fuel="Electricity"' />Electricity
+            </lable>
+        </div>
+        <div class="form-group col-md-5">
+            <label for="EngineDisplacement" class="control-label">EngineDisplacement</label>
+            <input form="EngineDisplacement" type="number" class="form-control" @bind="car.EngineDisplacement" />
+        </div>
+        <div class="form-group col-md-5">
+            <label for="Price" class="control-label">Price</label>
+            <input form="Price" type="number" class="form-control" @bind="car.Price" />
+        </div>
+        <div class="form-group col-md-5">
+            <label for="ImageFile" class="control-label">Image</label>
+            <InputFile OnChange="@HandleFileSelected"></InputFile>
+        </div>
 
-            <div class="col-md-4">
-                <div class="form-group">
-                    <input type="button" class="btn btn-primary" @onclick="@Update" value="Update" />
-                    <input type="button" class="btn btn-danger" @onclick="@Cancel" value="Cancel" />
-                </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@Update" value="Update" />
+                <input type="button" class="btn btn-danger" @onclick="@Cancel" value="Cancel" />
             </div>
-            <div class="col-12">
-                <p id="error" class="text-danger text-left">@ErrorMessage</p>
-            </div>
-            
+        </div>
+        <div class="col-12">
+            <p id="error" class="text-danger text-left">@ErrorMessage</p>
+        </div>
+
     </div>
 </form>
 
@@ -94,23 +96,25 @@
     [Parameter]
     public string Id { get; set; }
 
-    Car car = new Car();
+    Car car ;
     IFileListEntry file;
     string ErrorMessage;
     DateTime? today = DateTime.Today;
 
     protected override async Task OnInitializedAsync()
     {
-        car = CarService.GetCar(Int32.Parse(Id));
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         if (!authState.User.Identity.IsAuthenticated)
         {
-            nav.NavigateTo("Identity/Account/Login");
+            JSRuntime.InvokeVoidAsync("goToLogin");
+            return;
         }
         else if (!authState.User.IsInRole("Admin"))
         {
             nav.NavigateTo("/");
+            return;
         }
+        car = CarService.GetCar(Int32.Parse(Id));
     }
 
     void HandleFileSelected(IFileListEntry[] files)
@@ -120,7 +124,11 @@
 
     protected async void Update()
     {
-
+        var confirmation = await JSRuntime.InvokeAsync<bool>("confirm");
+        if (!confirmation)
+        {
+            return;
+        }
         if (String.IsNullOrEmpty(car.Make) || car.Make.Length < 3 || car.Make.Length > 10)
         {
             ErrorMessage = "Car make length should be between 3 to 10!";
@@ -193,7 +201,8 @@
 
         if (file != null)
         {
-            if (car.ImageName != null){
+            if (car.ImageName != null)
+            {
                 await fileUpload.DeleteOldImage(car.ImageName);
             }
 
@@ -208,7 +217,7 @@
     }
     protected void Cancel()
     {
-        nav.NavigateTo("/Cars");
+        nav.NavigateTo("/Cars", true);
     }
 
 }

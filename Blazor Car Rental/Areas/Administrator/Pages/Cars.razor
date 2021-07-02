@@ -6,6 +6,9 @@
 @inject RentalServices RentalService
 @inject NavigationManager nav;
 @inject IFileUpload fileUpload;
+@inject IJSRuntime JSRuntime;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+
 <h1 class="text-center text-white bg-dark">Cars List</h1>
 
 @if (cars == null)
@@ -61,12 +64,23 @@ else
         </tbody>
     </table>
 }
-
+}
 @code{
     private List<Car> cars;
 
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (!authState.User.Identity.IsAuthenticated)
+        {
+            JSRuntime.InvokeVoidAsync("goToLogin");
+            return;
+        }
+        else if (!authState.User.IsInRole("Admin"))
+        {
+            nav.NavigateTo("/");
+            return;
+        }
         cars = CarService.GetCars();
         cars.Reverse();
     }
@@ -92,8 +106,12 @@ else
 
     async Task DeleteCar(int id, string imageName)
     {
-        await fileUpload.DeleteOldImage(imageName);
-        CarService.DeleteCar(id);
-        cars = CarService.GetCars();
+        var confirmation = await JSRuntime.InvokeAsync<bool>("confirm");
+        if (confirmation)
+        {
+            await fileUpload.DeleteOldImage(imageName);
+            CarService.DeleteCar(id);
+            cars = CarService.GetCars();
+        }
     }
 }

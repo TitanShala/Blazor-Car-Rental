@@ -1,12 +1,15 @@
 ﻿@page "/CarDetails/{Id}"
 
-
+@using System.Security.Claims
 @using Blazor_Car_Rental.Data.Models
 @using Blazor_Car_Rental.Areas.Administrator.Services
 @using Blazor_Car_Rental.Data.Services
 @inject AdmCarServices CarService
 @inject NavigationManager nav;
 @inject IFileUpload fileUpload;
+@inject IJSRuntime JSRuntime;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+
 
 @car.Make
 
@@ -18,6 +21,17 @@
 
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (!authState.User.Identity.IsAuthenticated)
+        {
+            JSRuntime.InvokeVoidAsync("goToLogin");
+            return;
+        }
+        else if (!authState.User.IsInRole("Admin"))
+        {
+            nav.NavigateTo("/");
+            return;
+        }
         car = CarService.GetCar(Convert.ToInt32(Id));
     }
 

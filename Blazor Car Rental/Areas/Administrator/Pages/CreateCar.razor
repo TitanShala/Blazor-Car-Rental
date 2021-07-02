@@ -8,82 +8,83 @@
 @inject NavigationManager nav;
 @inject IFileUpload fileUpload;
 @inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IJSRuntime JSRuntime;
 
 <h2 class="text-center mt-5 mb-5">Add New Car</h2>
 
 <form class="container bg-light">
     <div class="row bg-light d-flex justify-content-center pt-5 pb-5 ">
-            <div class="form-group col-md-5">
-                <label for="Make" class="control-label">Make</label>
-                <input form="Make" class="form-control" @bind="newCar.Make" />
-            </div>
-            <div class="form-group col-md-5">
-                <label for="Model" class="control-label">Model</label>
-                <input form="Model" class="form-control" @bind="newCar.Model" />
-            </div>
-            <div class="form-group col-md-5">
-                <label for="Year" class="control-label">Year</label>
-                <input form="Year" type="number" class="form-control" @bind="newCar.Year" />
-            </div>
-            <div class="form-group col-md-5">
-                <label for="Doors" class="control-label">Doors</label>
-                <input form="Doors" type="number" class="form-control" @bind="newCar.Doors" />
-            </div>
-            <div class="form-group col-md-5">
-                <label for="Luggages" class="control-label">Luggages</label>
-                <input form="Luggages" type="number" class="form-control" @bind="newCar.Luggages" />
-            </div>
-            <div class="form-group col-md-5">
-                <label for="Power" class="control-label">Power</label>
-                <input form="Power" type="number" class="form-control" @bind="newCar.Power" />
-            </div>
-            <div class="form-group col-md-5">
-                <p>Transmission:</p>
-                <lable>
-                    <input type="radio" name="transmission" checked=@(newCar.Transmission.Equals("Automatic")) @onclick='() =>newCar.Transmission="Automatic"' />Automatic
-                </lable>
-                <lable>
-                    <input type="radio" name="transmission" checked=@(newCar.Transmission.Equals("Manual")) @onclick='() =>newCar.Transmission="Manual"' />Manual
-                </lable>
-            </div>
-            <div class="form-group col-md-5">
-                <p>Fuel:</p>
-                <lable>
-                    <input type="radio" name="group" checked=@(newCar.Fuel.Equals("Diesel")) @onclick='() =>newCar.Fuel="Diesel"' />Diesel
-                </lable>
-                <lable>
-                    <input type="radio" name="group" checked=@(newCar.Fuel.Equals("Gasoline")) @onclick='() =>newCar.Fuel="Gasoline"' />Gasoline
-                </lable>
-                <lable>
-                    <input type="radio" name="group" checked=@(newCar.Fuel.Equals("Hybrid")) @onclick='() =>newCar.Fuel="Hybrid"' />Hybrid
-                </lable>
-                <lable>
-                    <input type="radio" name="group" checked=@(newCar.Fuel.Equals("Electricity")) @onclick='() =>newCar.Fuel="Electricity"' />Electricity
-                </lable>
-            </div>
-            <div class="form-group col-md-5">
-                <label for="EngineDisplacement" class="control-label">EngineDisplacement</label>
-                <input form="EngineDisplacement" type="number" class="form-control" @bind="newCar.EngineDisplacement" />
-            </div>
-            <div class="form-group col-md-5">
-                <label for="Price" class="control-label">Price</label>
-                <input form="Price" type="number" class="form-control" @bind="newCar.Price" />
-            </div>
-            <div class="form-group col-md-5">
-                <label for="ImageFile" class="control-label">Image</label>
-                <InputFile OnChange="@HandleFileSelected"></InputFile>
-            </div>
+        <div class="form-group col-md-5">
+            <label for="Make" class="control-label">Make</label>
+            <input form="Make" class="form-control" @bind="newCar.Make" />
+        </div>
+        <div class="form-group col-md-5">
+            <label for="Model" class="control-label">Model</label>
+            <input form="Model" class="form-control" @bind="newCar.Model" />
+        </div>
+        <div class="form-group col-md-5">
+            <label for="Year" class="control-label">Year</label>
+            <input form="Year" type="number" class="form-control" @bind="newCar.Year" />
+        </div>
+        <div class="form-group col-md-5">
+            <label for="Doors" class="control-label">Doors</label>
+            <input form="Doors" type="number" class="form-control" @bind="newCar.Doors" />
+        </div>
+        <div class="form-group col-md-5">
+            <label for="Luggages" class="control-label">Luggages</label>
+            <input form="Luggages" type="number" class="form-control" @bind="newCar.Luggages" />
+        </div>
+        <div class="form-group col-md-5">
+            <label for="Power" class="control-label">Power</label>
+            <input form="Power" type="number" class="form-control" @bind="newCar.Power" />
+        </div>
+        <div class="form-group col-md-5">
+            <p>Transmission:</p>
+            <lable>
+                <input type="radio" name="transmission" checked=@(newCar.Transmission.Equals("Automatic")) @onclick='() =>newCar.Transmission="Automatic"' />Automatic
+            </lable>
+            <lable>
+                <input type="radio" name="transmission" checked=@(newCar.Transmission.Equals("Manual")) @onclick='() =>newCar.Transmission="Manual"' />Manual
+            </lable>
+        </div>
+        <div class="form-group col-md-5">
+            <p>Fuel:</p>
+            <lable>
+                <input type="radio" name="group" checked=@(newCar.Fuel.Equals("Diesel")) @onclick='() =>newCar.Fuel="Diesel"' />Diesel
+            </lable>
+            <lable>
+                <input type="radio" name="group" checked=@(newCar.Fuel.Equals("Gasoline")) @onclick='() =>newCar.Fuel="Gasoline"' />Gasoline
+            </lable>
+            <lable>
+                <input type="radio" name="group" checked=@(newCar.Fuel.Equals("Hybrid")) @onclick='() =>newCar.Fuel="Hybrid"' />Hybrid
+            </lable>
+            <lable>
+                <input type="radio" name="group" checked=@(newCar.Fuel.Equals("Electricity")) @onclick='() =>newCar.Fuel="Electricity"' />Electricity
+            </lable>
+        </div>
+        <div class="form-group col-md-5">
+            <label for="EngineDisplacement" class="control-label">EngineDisplacement</label>
+            <input form="EngineDisplacement" type="number" class="form-control" @bind="newCar.EngineDisplacement" />
+        </div>
+        <div class="form-group col-md-5">
+            <label for="Price" class="control-label">Price</label>
+            <input form="Price" type="number" class="form-control" @bind="newCar.Price" />
+        </div>
+        <div class="form-group col-md-5">
+            <label for="ImageFile" class="control-label">Image</label>
+            <InputFile OnChange="@HandleFileSelected"></InputFile>
+        </div>
 
-            <div class="col-md-4">
-                <div class="form-group">
-                    <input type="button" class="btn btn-primary" @onclick="@CreateNewCar" value="Save" />
-                    <input type="button" class="btn btn-danger" @onclick="@Cancel" value="Cancel" />
-                </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@CreateNewCar" value="Save" />
+                <input type="button" class="btn btn-danger" @onclick="@Cancel" value="Cancel" />
             </div>
-            <div class="col-12">
-                <p id="error" class="text-danger text-left">@ErrorMessage</p>
-            </div>
-            
+        </div>
+        <div class="col-12">
+            <p id="error" class="text-danger text-left">@ErrorMessage</p>
+        </div>
+
     </div>
 </form>
 
@@ -94,7 +95,7 @@
     IFileListEntry file;
     string ErrorMessage;
     DateTime? today = DateTime.Today;
-    List<string> ImageExtensions = new List<string> { ".JPG", ".JPE", ".BMP", ".GIF", ".PNG" , "WEBP"};
+    List<string> ImageExtensions = new List<string> { ".JPG", ".JPE", ".BMP", ".GIF", ".PNG", "WEBP" };
 
     protected override async Task OnInitializedAsync()
     {
@@ -103,11 +104,13 @@
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         if (!authState.User.Identity.IsAuthenticated)
         {
-            nav.NavigateTo("Identity/Account/Login");
+            JSRuntime.InvokeVoidAsync("goToLogin");
+            return;
         }
         else if (!authState.User.IsInRole("Admin"))
         {
             nav.NavigateTo("/");
+            return;
         }
     }
 
@@ -119,7 +122,7 @@
 
     protected async void CreateNewCar()
     {
-        if(String.IsNullOrEmpty(newCar.Make) || newCar.Make.Length < 3 || newCar.Make.Length > 10)
+        if (String.IsNullOrEmpty(newCar.Make) || newCar.Make.Length < 3 || newCar.Make.Length > 10)
         {
             ErrorMessage = "Car make length should be between 3 to 10!";
             return;
@@ -141,25 +144,25 @@
 
         int thisyear = today.Value.Year;
 
-        if(newCar.Year == null || thisyear < newCar.Year || newCar.Year < 1900)
+        if (newCar.Year == null || thisyear < newCar.Year || newCar.Year < 1900)
         {
             ErrorMessage = "Year is not valid!";
             return;
         }
 
-        if(newCar.Doors == null || newCar.Doors < 2 || newCar.Doors > 8)
+        if (newCar.Doors == null || newCar.Doors < 2 || newCar.Doors > 8)
         {
             ErrorMessage = "Doors should be between 2 and 8!";
             return;
         }
 
-        if(newCar.Luggages == null || newCar.Luggages < 0 || newCar.Luggages > 20)
+        if (newCar.Luggages == null || newCar.Luggages < 0 || newCar.Luggages > 20)
         {
             ErrorMessage = "Luggages should be between 0 and 20";
             return;
         }
 
-        if(newCar.Power == null || newCar.Power < 50 || newCar.Power > 3000)
+        if (newCar.Power == null || newCar.Power < 50 || newCar.Power > 3000)
         {
             ErrorMessage = "Power should be between 50 and 3000";
             return;
@@ -177,7 +180,7 @@
             return;
         }
 
-        if(newCar.EngineDisplacement == null || newCar.EngineDisplacement <0.5 || newCar.EngineDisplacement > 12)
+        if (newCar.EngineDisplacement == null || newCar.EngineDisplacement < 0.5 || newCar.EngineDisplacement > 12)
         {
             ErrorMessage = "Engine displacement should be between 0.5 and 12!";
             return;

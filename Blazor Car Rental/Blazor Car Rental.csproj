@@ -16,6 +16,7 @@
   <ItemGroup>
     <PackageReference Include="Blazored.SessionStorage" Version="2.1.0" />
     <PackageReference Include="BlazorInputFile" Version="0.2.0" />
+    <PackageReference Include="Feliz.SweetAlert" Version="2.8.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.12" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.15" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.15" />
@@ -28,6 +29,7 @@
     <PackageReference Include="MongoDB.Driver" Version="2.12.3" />
     <PackageReference Include="SendGrid" Version="9.24.0" />
     <PackageReference Include="Stripe.net" Version="39.50.0" />
+    <PackageReference Include="SweetAlert" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
