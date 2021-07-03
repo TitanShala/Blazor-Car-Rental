@@ -41,9 +41,9 @@
 
 @code {
 
-        [Parameter]
-        public string Id { get; set; }
-        DateTime? today = DateTime.Today;
+    [Parameter]
+    public string Id { get; set; }
+    DateTime? today = DateTime.Today;
     public int CarId;
     Rental rental = new Rental();
     UserIdentity user = new UserIdentity();
@@ -86,6 +86,7 @@
             if (RentalService.ValidOrderDate(rental.ReceiptDate, rental.ReturnDate, today, CarId))
             {
                 RentalService.CreateRental(rental, CarId, username);
+                JSRuntime.InvokeVoidAsync("ActionDone");
                 nav.NavigateTo("/cars");
             }
             else

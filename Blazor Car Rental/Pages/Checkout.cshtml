@@ -22,6 +22,15 @@
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
     <link rel="stylesheet" href="css/global.css" />
     <link href="css/site.css" rel="stylesheet" />
+
+    <!--SweetAlert2 Files-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+    <script src="">https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/CHANGELOG.md</script>
+    <script src="">https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/LICENSE</script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/package.json"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/README.md"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/sweetalert2.d.ts"></script>
+    <script src="js/JavaScript.js"></script>
 </head>
 
 <body>
@@ -40,9 +49,10 @@
         </p>
         <p class="result-message hidden">
             Payment succeeded,
-            <a href="" target="_blank">Go to my Rentals.</a>
+            <a href="" target="_self">Go to my Rentals.</a>
         </p>
     </form>
+    
 </body>
 </html>
 
@@ -118,6 +128,7 @@
                     showError(result.error.message);
                 } else {
                     // The payment succeeded!
+                    ActionDone();
                     orderComplete(result.paymentIntent.id);
 
                 }

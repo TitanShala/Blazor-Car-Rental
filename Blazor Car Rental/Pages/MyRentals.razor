@@ -31,6 +31,7 @@ else
                 <th>Rated</th>
                 <th>Car Image</th>
                 <th>Review <i class="fa fa-star" aria-hidden="true"></i></th>
+                <th>Price</th>
                 <th>Pay Online. 10% Discount</th>
             </tr>
         </thead>
@@ -66,6 +67,9 @@ else
                                 <p>Rated</p>
                             }
                         </div>
+                    </td>
+                    <td>
+                        @getPrice(rental) Euro
                     </td>
                     @if (rental.Paid == false)
                     {
@@ -108,9 +112,23 @@ else
         {
             rental.Rate = rate;
             RentalService.Update(rental);
+            JSRuntime.InvokeVoidAsync("ActionDone");
             this.rate = 0;
             nav.NavigateTo("/MyRentals");
         }
+    }
+
+    double getPrice(Rental rental)
+    {
+        double CarPrice = rental.Car.Price;
+        int days = (int) (rental.ReturnDate - rental.ReceiptDate).TotalDays;
+        if (days < 1)
+        {
+            return CarPrice;
+        }
+
+
+        return CarPrice * days;
     }
     /*
     void AddNewCar()

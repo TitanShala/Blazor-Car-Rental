@@ -212,6 +212,7 @@
             await fileUpload.Upload(file, fileName);
         }
         CarService.UpdateCar(car);
+        JSRuntime.InvokeVoidAsync("ActionDone");
 
         nav.NavigateTo("/Cars");
     }

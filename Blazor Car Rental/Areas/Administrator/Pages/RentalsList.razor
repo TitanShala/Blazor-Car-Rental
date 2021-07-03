@@ -90,6 +90,7 @@ else
         {
             RentalService.SetToReturned(rental);
             nav.NavigateTo("/RentalsList");
+            JSRuntime.InvokeVoidAsync("ActionDone");
         }
     }
     /*

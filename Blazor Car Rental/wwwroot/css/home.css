@@ -45,7 +45,10 @@ body{
 }
 .top-cars-section {
     width: 100%;
-    background-color: black;
+    background-image: url('../Images/rent-cars.jpg');
+    background-repeat: repeat-x;
+    background-size: cover;
+    background-position: center;
     color: white;
 }
 .top-cars img{

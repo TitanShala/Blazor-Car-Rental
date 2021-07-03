@@ -48,6 +48,7 @@ namespace Blazor_Car_Rental.Controllers
             rental.Paid = true;
             rentalService.Update(rental);
             paymentService.Create(payment);
+
         }
     }
     public class Item

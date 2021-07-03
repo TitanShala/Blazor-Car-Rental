@@ -9,7 +9,7 @@
     <h1 class="text-white home-text">Do you want to drive the car of your DREAMS?<br />You just came to the right place!</h1>
     <input class="getIntouch" type="button" value="Get in touch!" @onclick="getInTouch"/>
 </div>
-<section class="top-cars-section pt-5 text-center">
+<section class="top-cars-section pt-5 pb-5 text-center">
     <h1 class="mb-5">Top Cars</h1>   
     <div class="container top-cars">
         <div class="row">
@@ -34,16 +34,15 @@
                             <p>Rented: @car.rentalcount times!</p>
                             <p>Rated: @string.Format("{0:0.0}", RentalService.getReview(car.Id))  <i class="fa fa-star" aria-hidden="true"></i></p>
                             <input type="button" class="btn btn-success btn-1" value="Rent" @onclick="() => RentCar(car.Id)" />
-                            <a href="/Identity/Account/Login">Rent a</a>
                         </div>
                     </div>
                 </div>
             }
         </div>
-        <input type="button" class="btn mt-4" value="Check Cars" @onclick="CheckCars"/>
+        <input type="button" class="btn btn-info mt-4" value="Check Cars" @onclick="CheckCars"/>
     </div>
 </section>
-<section class="about mt-5">
+<section class="about pt-5 pb-5">
     <div class="container">
         <h1>About Us</h1>
         <div class="about-content">

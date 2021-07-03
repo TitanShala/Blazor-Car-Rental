@@ -112,6 +112,7 @@ else
             await fileUpload.DeleteOldImage(imageName);
             CarService.DeleteCar(id);
             cars = CarService.GetCars();
+            JSRuntime.InvokeVoidAsync("ActionDone");
         }
     }
 }

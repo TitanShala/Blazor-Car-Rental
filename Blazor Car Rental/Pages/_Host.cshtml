@@ -41,8 +41,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/package.json"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/README.md"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/sweetalert2.d.ts"></script>
+    <script src="js/JavaScript.js"></script>
     <script>
-        function goToLogin() {
+        /*function goToLogin() {
             window.location.href = "/Identity/Account/Login";
         }
 
@@ -58,17 +59,20 @@
                     confirmButtonText: 'Yes!'
                 }).then((result) => {
                     resolve(result.isConfirmed);
-                    /*if (result.isConfirmed) {
-                        Swal.fire(
-                            'Deleted!',
-                            'Your file has been deleted.',
-                            'success'
-                        )
 
-                }*/
-                                })
-        });
-                        }
+                    })
+                });
+        }
+
+        function ActionDone() {
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Your work has been saved',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }*/
     </script>
 </body>
 </html>

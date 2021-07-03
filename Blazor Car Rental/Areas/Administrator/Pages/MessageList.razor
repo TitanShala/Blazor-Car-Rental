@@ -76,7 +76,9 @@ else
         {
             MessageServices.DeleteMessage(id);
             Messages = MessageServices.GetMessages();
+            JSRuntime.InvokeVoidAsync("ActionDone");
         }
+
     }
 
 }

@@ -1,5 +1,11 @@
 ﻿body {
 }
+.rentcars {
+    background-image: url('../Images/rent-cars.jpg');
+    background-repeat: repeat-x;
+    background-size: cover;
+    background-position: center;
+}
 *:focus{
     outline:none!important;
 }
