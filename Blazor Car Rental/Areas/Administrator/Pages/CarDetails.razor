@@ -11,7 +11,36 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 
 
-@car.Make
+<div class="details-section">
+    <div class="container">
+        <h1 class="text-white text-center mt-5 mb-5">Car Details</h1>
+        <div class="row">
+            <div class="col-6 cars-info text-dark bg-white p-3 d-flex flex-column justify-content-around">
+                <div class="row">
+                    <p class="col-4">Make: @car.Make.ToUpper()</p>
+                    <p class="col-4">Model: @car.Model.ToUpper()</p>
+                    <p class="col-4">Transmission: @car.Transmission.ToUpper()</p>
+                </div>
+                <div class="row mt-3">
+                    <p class="col-4">Year: @car.Year</p>
+                    <p class="col-4">Doors: @car.Doors</p>
+                    <p class="col-4">Luggages: @car.Luggages</p>
+                </div>
+                <div class="row mt-3">
+                    <p class="col-4">Fuel: @car.Fuel.ToUpper()</p>
+                    <p class="col-4">Power: @car.Power HP</p>
+                    <p class="col-4">Engine: @car.EngineDisplacement L</p>
+                </div>
+                <div class="row mt-3">
+                    <p class="col-4">Price: @car.Price Euro</p>
+                </div>
+            </div>
+            <div class="col-6 cars-image">
+                <img src="../CarImages/@car.ImageName" class="img-fluid" />
+            </div>
+        </div>
+    </div>
+</div>
 
 @code {
     [Parameter]
