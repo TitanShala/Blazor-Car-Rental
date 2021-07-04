@@ -121,7 +121,7 @@ else
     double getPrice(Rental rental)
     {
         double CarPrice = rental.Car.Price;
-        int days = (int) (rental.ReturnDate - rental.ReceiptDate).TotalDays;
+        int days = (int)(rental.ReturnDate - rental.ReceiptDate).TotalDays;
         if (days < 1)
         {
             return CarPrice;
@@ -130,26 +130,5 @@ else
 
         return CarPrice * days;
     }
-    /*
-    void AddNewCar()
-    {
-        nav.NavigateTo("/CreateCar");
-    }
 
-    async Task EditCar(int id)
-    {
-        nav.NavigateTo();
-    }
-
-    async Task CarDetails(int id)
-    {
-        nav.NavigateTo();
-    }
-
-    async Task DeleteCar()
-    {
-        await fileUpload.DeleteOldImage(imageName);
-        CarService.DeleteCar(id);
-        cars = await CarService.GetCars();
-    }*/
 }
