@@ -12,6 +12,7 @@
 *:active {
     border: none !important;
     outline: none !important;
+    border:none;
 }
 .search{
     background-color:darkred;
